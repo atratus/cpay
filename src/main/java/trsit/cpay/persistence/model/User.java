@@ -9,7 +9,6 @@ import javax.persistence.Id;
 
 /**
  * @author black
- *
  */
 @Entity
 public class User {
@@ -24,5 +23,4 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
-    
 }
