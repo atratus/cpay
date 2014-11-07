@@ -31,6 +31,13 @@
         </dependency>
 
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.14.8</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>c3p0</groupId>
             <artifactId>c3p0</artifactId>
             <version>0.9.1.2</version>
@@ -76,6 +83,17 @@
         </dependency>
 
         <dependency>
+            <groupId>com.googlecode.wicket-jquery-ui</groupId>
+            <artifactId>wicket-jquery-ui-theme-uilightness</artifactId>
+            <version>6.17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.googlecode.wicket-jquery-ui</groupId>
+            <artifactId>wicket-jquery-ui</artifactId>
+            <version>6.17.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-spring</artifactId>
             <version>${wicket.version}</version>
@@ -87,6 +105,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-extensions</artifactId>
+            <version>6.17.0</version>
+        </dependency>
+
         <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket-core</artifactId>

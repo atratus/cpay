@@ -12,12 +12,19 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.experimental.Builder;
+
 /**
  * @author black
  *
  */
 @Entity
-public class PaymentEvent {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class PaymentEvent extends Persistent {
     private String title;
     private Date creationTimestamp;
 

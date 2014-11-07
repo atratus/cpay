@@ -7,5 +7,7 @@
     <mapping package="trsit.cpay.persistence.model"/>
     
     <mapping class="trsit.cpay.persistence.model.User"/>
+    <mapping class="trsit.cpay.persistence.model.Payment"/>
+    <mapping class="trsit.cpay.persistence.model.PaymentEvent"/>
   </session-factory>
 </hibernate-configuration>

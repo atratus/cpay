@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
  *
  */
 @Entity
-public class Payment {
+public class Payment extends Persistent {
 
     public final static String FIELD_PAYMENT_EVENT = "paymentEvent";
     
@@ -21,19 +21,29 @@ public class Payment {
     private BigDecimal value;
     private PaymentEvent paymentEvent;
     
+    @ManyToOne
     public User getUser() {
         return user;
     }
     
-    @ManyToOne
     public void setUser(User user) {
         this.user = user;
     }
+    
     public BigDecimal getValue() {
         return value;
     }
     public void setValue(BigDecimal value) {
         this.value = value;
+    }
+
+    @ManyToOne
+    public PaymentEvent getPaymentEvent() {
+        return paymentEvent;
+    }
+
+    public void setPaymentEvent(PaymentEvent paymentEvent) {
+        this.paymentEvent = paymentEvent;
     }
     
     

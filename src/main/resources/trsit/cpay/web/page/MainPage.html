@@ -1,6 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:wicket="http://wicket.apache.org">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:wicket="http://wicket.apache.org">
+
+<wicket:head>
+  <!-- wicket:link>
+    <link wicket:id="stylesheet" rel="stylesheet" type="text/css" href="/com/googlecode/wicket/jquery/ui/theme/jquery-ui.css"/>
+  </wicket:link -->
+</wicket:head>
 <body>
-    <div wicket:id="helloMessage">[Label's message goes here]</div>
+    <wicket:message key="balance">Balance</wicket:message>
+    <table cellspacing="0" class="events">
+        <tbody>
+            <tr wicket:id="events">
+                <td><span wicket:id="title">Test ID</span></td>
+                <td><span wicket:id="date">Test ID</span></td>
+            </tr>
+        </tbody>
+    </table>
+
 </body>
 </html>
