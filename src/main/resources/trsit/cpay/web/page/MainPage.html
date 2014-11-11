@@ -3,20 +3,46 @@
     xmlns:wicket="http://wicket.apache.org">
 
 <wicket:head>
-  <!-- wicket:link>
-    <link wicket:id="stylesheet" rel="stylesheet" type="text/css" href="/com/googlecode/wicket/jquery/ui/theme/jquery-ui.css"/>
-  </wicket:link -->
+
+    <script type="text/javascript">
+    function init() {
+    $().ready(function(){
+        alert('?');
+    	 $(".events th").each(function(){
+    	 
+    	  $(this).addClass("ui-state-default");
+    	 
+    	  });
+    	 $(".events td").each(function(){
+    	 
+    	  $(this).addClass("ui-widget-content");
+    	 
+    	  });
+    	 $(".events tr").hover(
+    	     function()
+    	     {
+    	      $(this).children("td").addClass("ui-state-hover");
+    	     },
+    	     function()
+    	     {
+    	      $(this).children("td").removeClass("ui-state-hover");
+    	     }
+    	    );
+    	 $(".events tr").click(function(){
+    	   
+    	   $(this).children("td").toggleClass("ui-state-highlight");
+    	  });
+    	 
+    	});
+
+    }
+
+    </script>
+
 </wicket:head>
-<body>
+<body class="main" onload="init()">
     <wicket:message key="balance">Balance</wicket:message>
-    <table cellspacing="0" class="events">
-        <tbody>
-            <tr wicket:id="events">
-                <td><span wicket:id="title">Test ID</span></td>
-                <td><span wicket:id="date">Test ID</span></td>
-            </tr>
-        </tbody>
-    </table>
+    <table cellspacing="0" wicket:id="events" class="events"></table>
 
 </body>
 </html>

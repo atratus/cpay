@@ -31,5 +31,6 @@ public class CPayApplication extends WebApplication {
     public void init() {
         getComponentInstantiationListeners().add(new SpringComponentInjector(this,
                 SPRING_CTX));
+
     }
 }
