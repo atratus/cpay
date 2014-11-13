@@ -74,8 +74,7 @@ public class MainPage extends WebPage {
         });
         add(new DefaultDataTable<EventItem, String>(
                 "events", columns, new EventsProvider(eventsDAO.getEvents()), ROWS_PER_PAGE));
-        
-//       add(new JQueryBehavior("body"));
+
     }
     
     

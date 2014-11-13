@@ -6,32 +6,16 @@
 
     <script type="text/javascript">
     function init() {
-    $().ready(function(){
-        alert('?');
-    	 $(".events th").each(function(){
-    	 
-    	  $(this).addClass("ui-state-default");
-    	 
-    	  });
-    	 $(".events td").each(function(){
-    	 
-    	  $(this).addClass("ui-widget-content");
-    	 
-    	  });
+        $().ready(function(){
+    	 $(".events th").addClass("ui-state-default");
+    	 $(".events td").addClass("ui-widget-content");
     	 $(".events tr").hover(
-    	     function()
-    	     {
-    	      $(this).children("td").addClass("ui-state-hover");
-    	     },
-    	     function()
-    	     {
-    	      $(this).children("td").removeClass("ui-state-hover");
-    	     }
-    	    );
-    	 $(".events tr").click(function(){
-    	   
-    	   $(this).children("td").toggleClass("ui-state-highlight");
-    	  });
+    	     function() {$(this).children("td").addClass("ui-state-hover");},
+    	     function() {$(this).children("td").removeClass("ui-state-hover");}
+    	 );
+         $(".events tr").click(function(){
+             $(this).children("td").toggleClass("ui-state-highlight");
+         });
     	 
     	});
 
