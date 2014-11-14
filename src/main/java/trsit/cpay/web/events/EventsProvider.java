@@ -12,6 +12,7 @@ import trsit.cpay.data.ItemsSet;
 import trsit.cpay.persistence.model.PaymentEvent;
 
 public class EventsProvider extends SortableDataProvider<EventItem, String> {
+    private static final long serialVersionUID = 1L;
 
     private ItemsSet<PaymentEvent> events;
     
@@ -21,8 +22,6 @@ public class EventsProvider extends SortableDataProvider<EventItem, String> {
     public EventsProvider(ItemsSet<PaymentEvent> events) {
         this.events = events;
     }
-
-    private static final long serialVersionUID = 1L;
 
     @Override
     public Iterator<? extends EventItem> iterator(long first, long count) {

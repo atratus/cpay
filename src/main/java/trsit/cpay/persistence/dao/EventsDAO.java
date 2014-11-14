@@ -8,6 +8,7 @@ import javax.inject.Inject;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import trsit.cpay.data.ItemsSet;
 import trsit.cpay.persistence.model.PaymentEvent;
@@ -25,11 +26,18 @@ public class EventsDAO {
     @Inject
     private SessionFactory sessionFactory;
     
+    @Inject
+    private TransactionTemplate transactionTemplate;
+    
+
     @Transactional(readOnly = true)
     public ItemsSet<PaymentEvent> getEvents() {
-        JPQLQuery query = new HibernateQuery(sessionFactory.getCurrentSession()).from(QPaymentEvent.paymentEvent);
+        JPQLQuery query = new HibernateQuery().from(QPaymentEvent.paymentEvent);
         
-        return new PersistentItemsSet<PaymentEvent>(query, QPaymentEvent.paymentEvent);
+        
+        return new PersistentItemsSet<PaymentEvent>(
+                sessionFactory, transactionTemplate,
+                query, QPaymentEvent.paymentEvent);
  
         /*
         List<PaymentEvent> events = new ArrayList<PaymentEvent>();
