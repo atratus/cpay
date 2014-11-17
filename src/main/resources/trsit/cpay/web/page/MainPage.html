@@ -7,26 +7,33 @@
     <script type="text/javascript">
     function init() {
         $().ready(function(){
-    	 $(".events th").addClass("ui-state-default");
-    	 $(".events td").addClass("ui-widget-content");
-    	 $(".events tr").hover(
+    	 $(".table th").addClass("ui-state-default");
+    	 $(".table td").addClass("ui-widget-content");
+    	 $(".table tr").hover(
     	     function() {$(this).children("td").addClass("ui-state-hover");},
     	     function() {$(this).children("td").removeClass("ui-state-hover");}
     	 );
-         $(".events tr").click(function(){
+         $(".table tr").click(function(){
              $(this).children("td").toggleClass("ui-state-highlight");
          });
     	 
     	});
 
     }
-
     </script>
 
 </wicket:head>
 <body class="main" onload="init()">
-    <wicket:message key="balance">Balance</wicket:message>
-    <table cellspacing="0" wicket:id="events" class="events"></table>
-
+    <wicket:extend>
+        <div class="title">
+            <wicket:message key="balance">Balance</wicket:message>
+        </div>
+        <div class="toolbar">
+            <a wicket:id="add" href="#"><wicket:message key="add" /></a>
+        </div>
+        <div class="content">
+            <table cellspacing="0" wicket:id="events" class="table"></table>
+        </div>
+    </wicket:extend>
 </body>
 </html>

@@ -1,0 +1,26 @@
+.title {
+    padding:5px;
+    border-bottom:2px solid gray;
+    font-weight:bold;
+    background:lightgray;
+}
+
+.toolbar {
+    padding:5px;
+    background:lightgray;
+}
+.toolbar a:link {
+    text-decoration: none;
+}
+
+.content {
+    padding-top:10px;
+}
+
+.table {
+    width:100%;
+}
+.options-list {
+    width:100%;
+    border:1px solid black;
+}
