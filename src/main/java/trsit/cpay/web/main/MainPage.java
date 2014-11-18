@@ -1,7 +1,7 @@
 /**
  * 
  */
-package trsit.cpay.web.page;
+package trsit.cpay.web.main;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,12 +21,11 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import trsit.cpay.persistence.dao.EventsDAO;
 import trsit.cpay.persistence.dao.UserDAO;
-import trsit.cpay.web.events.EventItem;
-import trsit.cpay.web.events.EventsProvider;
+import trsit.cpay.web.edit.EditEvent;
+import trsit.cpay.web.page.Layout;
 
 /**
  * @author black
- *
  */
 public class MainPage extends Layout {
     private static final long serialVersionUID = 1L;

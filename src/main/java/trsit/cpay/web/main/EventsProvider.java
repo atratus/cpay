@@ -1,4 +1,4 @@
-package trsit.cpay.web.events;
+package trsit.cpay.web.main;
 
 import java.util.ArrayList;
 import java.util.Collection;

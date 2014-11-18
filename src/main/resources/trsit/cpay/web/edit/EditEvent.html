@@ -15,12 +15,10 @@
     <wicket:extend>
 
         <form wicket:id="eventForm">
-            <table class="options-list">
-                <tr wicket:id="event-members">
-                    <td><select wicket:id="users"></select></td>
-                    <td></td>
-                </tr>
-            </table>
+            <div wicket:id="eventMembers">
+            <div wicket:id="eventMemberItem"/>
+            </div>
+            <input type="submit"/>
         </form>
 
     </wicket:extend>

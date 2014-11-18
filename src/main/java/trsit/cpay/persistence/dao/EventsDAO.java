@@ -5,10 +5,8 @@ package trsit.cpay.persistence.dao;
 
 import javax.inject.Inject;
 
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionTemplate;
 
 import trsit.cpay.data.ItemsSet;
 import trsit.cpay.persistence.model.PaymentEvent;
@@ -24,27 +22,12 @@ import com.mysema.query.jpa.hibernate.HibernateQuery;
 public class EventsDAO {
 
     @Inject
-    private SessionFactory sessionFactory;
-    
-    @Inject
-    private TransactionTemplate transactionTemplate;
-    
+    private PersistentSetsFactory persistentSetsFactory;
 
     @Transactional(readOnly = true)
     public ItemsSet<PaymentEvent> getEvents() {
         JPQLQuery query = new HibernateQuery().from(QPaymentEvent.paymentEvent);
-        
-        
-        return new PersistentItemsSet<PaymentEvent>(
-                sessionFactory, transactionTemplate,
-                query, QPaymentEvent.paymentEvent);
- 
-        /*
-        List<PaymentEvent> events = new ArrayList<PaymentEvent>();
-        events.add(PaymentEvent.builder().title("Payment1").creationTimestamp(new Date()).build());
-        events.add(PaymentEvent.builder().title("Payment2").creationTimestamp(new Date()).build());
-        events.add(PaymentEvent.builder().title("Payment3").creationTimestamp(new Date()).build());
-        return new ListItemsSet<PaymentEvent>(events);
-        */
+
+        return persistentSetsFactory.buildSet(query, QPaymentEvent.paymentEvent);
     }
 }
