@@ -7,13 +7,12 @@ package trsit.cpay.web.edit;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.model.util.ListModel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import trsit.cpay.web.page.Layout;
 
@@ -25,55 +24,54 @@ public class EditEvent extends Layout {
     private static final long serialVersionUID = 1L;
     public static final String EVENT_ID = "eventId";
     
+    private final List<EventMemberItem> eventItems;
 
-    public EditEvent() {
+    public EditEvent(PageParameters pageParameters) {
 
-       // final List<DropDownChoice<UserViewBean>> selectedUserModels = new ArrayList<>();
+        eventItems = loadEvent(pageParameters.get(EVENT_ID).toLong());
 
-        Form<Void> form = new Form<Void>("eventForm") {
-            private static final long serialVersionUID = 1L;
-            private List<EventMemberItem> items;
-
-            @Override
-            protected void onSubmit() {
-                super.onSubmit();
-                
-            }
-            
-        };
-        form.setDefaultModel(new CompoundPropertyModel<Form<Void>>(form));
-
-        add(form);
-        
-
-        ListView<EventMemberItem> membersList = new ListView<EventMemberItem>("eventMembers", getEventMembers()) {
+        setDefaultModel(new CompoundPropertyModel<EditEvent>(this));
+ 
+        ListView<EventMemberItem> eventItemsControl = new ListView<EventMemberItem>(
+                "eventItems") {
             private static final long serialVersionUID = 1L;
             @Override
             protected void populateItem(final ListItem<EventMemberItem> item) {
-                item.add(new EventMemberComponent("eventMemberItem", new Model<EventMemberItem>() {
-                    private static final long serialVersionUID = 1L;
-
-                    @Override
-                    public void setObject(EventMemberItem object) {
-                        item.setDefaultModelObject(object);
-                    }
-                    
-                }));
+                item.add(new EventMemberComponent("eventMemberItem", item.getModel()));
                 
             }
             
         };
-        membersList.setReuseItems(true);
-        membersList.setOutputMarkupId(true);
-        
-        
-        form.add(membersList);
+        eventItemsControl.setReuseItems(true);
+        eventItemsControl.setOutputMarkupId(true);
+        add(eventItemsControl);
+       
+        add(new AjaxLink<Void>("submit") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                saveEvent();
+            }
+            
+        });
     }
 
-    private IModel<? extends List<? extends EventMemberItem>> getEventMembers() {
+    private List<EventMemberItem> loadEvent(long long1) {
         List<EventMemberItem> items = new ArrayList<EventMemberItem>();
-        items.add(EventMemberItem.builder().userName("User1").build());
-        items.add(EventMemberItem.builder().userName("User2").build());
-        return new ListModel<EventMemberItem>(items);
+        items.add(EventMemberItem.builder()
+                .user(null)
+                .build());
+        items.add(EventMemberItem.builder()
+                .user(null)
+                .build());
+        return items;
     }
+    
+    private void saveEvent() {
+        // TODO: implement
+        
+    }
+
+
 }

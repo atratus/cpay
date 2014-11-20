@@ -6,6 +6,8 @@ package trsit.cpay.web.edit;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -29,8 +31,6 @@ public class EventMemberComponent extends FormComponentPanel<EventMemberItem> {
     @SpringBean
     private UserDAO userDAO;
     
-    private UserViewBean user;
-    private Integer paymentValue;
 
     private static class UserViewBeanRenderer implements IChoiceRenderer<UserViewBean> {
         private static final long serialVersionUID = 1L;
@@ -45,26 +45,39 @@ public class EventMemberComponent extends FormComponentPanel<EventMemberItem> {
             return String.valueOf(object.getUserId());
         }
     }
-    
-    
-
-    @Override
-    protected void convertInput() {
-        super.convertInput();
-        setConvertedInput(EventMemberItem.builder().userName(user.getName()).build());
-    }
 
     public EventMemberComponent(String id, IModel<EventMemberItem> model) {
         super(id, model);
 
-        setDefaultModel(new CompoundPropertyModel<EventMemberComponent>(this));
-        DropDownChoice<UserViewBean> userSelector =  new DropDownChoice<UserViewBean>(
-                "user", getUserViews(), new UserViewBeanRenderer());
+        setDefaultModel(new CompoundPropertyModel<EventMemberItem>(model));
+        final DropDownChoice<UserViewBean> userSelector =  new DropDownChoice<UserViewBean>(
+                "user", getUserViews(), new UserViewBeanRenderer()) {
+
+                    private static final long serialVersionUID = 1L;
+/*
+                    protected boolean wantOnSelectionChangedNotifications() { return true; }
+                    
+                    @Override
+                    protected void onSelectionChanged(UserViewBean newSelection) {
+                        super.onSelectionChanged(newSelection);
+                    }
+*/
+        };
+        userSelector.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            private static final long serialVersionUID = 1L;
+
+            protected void onUpdate(AjaxRequestTarget target) {
+
+            }
+        });
+
+        userSelector.setOutputMarkupId(true);
         add(userSelector);
 
         NumberTextField<Integer> paymentInput = new NumberTextField<Integer>("paymentValue");
         add(paymentInput);
     }
+
 
     private IModel<List<UserViewBean>> getUserViews() {
         return new LoadableDetachableModel<List<UserViewBean>>() {
@@ -74,7 +87,10 @@ public class EventMemberComponent extends FormComponentPanel<EventMemberItem> {
             protected List<UserViewBean> load() {
                 List<UserViewBean> userViews = new ArrayList<UserViewBean>();
                 for(User user: userDAO.getUsers()) {//TODO: use [declarative] per-thread cache 
-                    userViews.add(UserViewBean.builder().name(user.getName()).build());
+                    userViews.add(UserViewBean.builder()
+                            .name(user.getName())
+                            .userId(user.getId())
+                            .build());
                 }
                 return userViews;
             }

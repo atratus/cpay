@@ -14,5 +14,7 @@ import lombok.experimental.Builder;
 public class EventMemberItem implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    private String userName;
+    private UserViewBean user;
+    private Integer paymentValue;
+
 }

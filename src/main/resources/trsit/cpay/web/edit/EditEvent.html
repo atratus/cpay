@@ -14,12 +14,11 @@
 <body class="main" onload="init()">
     <wicket:extend>
 
-        <form wicket:id="eventForm">
-            <div wicket:id="eventMembers">
-            <div wicket:id="eventMemberItem"/>
+            <div wicket:id="eventItems">
+                <div wicket:id="eventMemberItem"></div>
             </div>
-            <input type="submit"/>
-        </form>
+            <input wicket:id="submit" type="button" value="Save/Update"/>
+
 
     </wicket:extend>
 </body>
