@@ -5,19 +5,16 @@ package trsit.cpay.persistence.model;
 
 import javax.persistence.Entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
 /**
  * @author black
  */
 @Entity
+@Getter
+@Setter
 public class User extends Persistent {
 
     private String name;
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 }

@@ -75,8 +75,9 @@ public class MainPage extends Layout {
             @Override
             public void onClick() {
                 Long newEventId = 1l;
-                setResponsePage(EditEvent.class,
-                        new PageParameters().add(EditEvent.EVENT_ID, newEventId));
+                /*    setResponsePage(EditEvent.class,
+                new PageParameters().add(EditEvent.EVENT_ID, newEventId));*/
+                setResponsePage(EditEvent.class);
                 
             }
         });

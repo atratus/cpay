@@ -27,7 +27,11 @@ public class EventsProvider extends SortableDataProvider<EventItem, String> {
     public Iterator<? extends EventItem> iterator(long first, long count) {
         Collection<EventItem> items = new ArrayList<EventItem>();
         for(PaymentEvent event: events.subset(first, first + count)) {
-            items.add(EventItem.builder().title(event.getTitle()).creationTimestamp(event.getCreationTimestamp()).build());
+            items.add(EventItem.builder()
+                    .title(event.getTitle())
+                    .creationTimestamp(event.getCreationTimestamp())
+                    .id(event.getId())
+                    .build());
         }
         return items.iterator();
     }

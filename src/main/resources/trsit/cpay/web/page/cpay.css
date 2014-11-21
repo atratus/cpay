@@ -24,3 +24,9 @@
     width:100%;
     border:1px solid black;
 }
+.addControl, .deleteControl {
+    text-decoration: none;
+}
+.userSelector {
+    width:200px;
+}

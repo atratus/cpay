@@ -13,21 +13,31 @@ import trsit.cpay.persistence.model.PaymentEvent;
 import trsit.cpay.persistence.model.QPaymentEvent;
 
 import com.mysema.query.jpa.JPQLQuery;
-import com.mysema.query.jpa.hibernate.HibernateQuery;
 
 /**
  * @author black
  */
 @Repository
-public class EventsDAO {
+public class EventsDAO extends AbstractDAO {
+
 
     @Inject
     private PersistentSetsFactory persistentSetsFactory;
 
-    @Transactional(readOnly = true)
     public ItemsSet<PaymentEvent> getEvents() {
-        JPQLQuery query = new HibernateQuery().from(QPaymentEvent.paymentEvent);
+        JPQLQuery query = detachedQuery().from(QPaymentEvent.paymentEvent);
 
         return persistentSetsFactory.buildSet(query, QPaymentEvent.paymentEvent);
+    }
+
+    @Transactional(readOnly = true)
+    public PaymentEvent loadEvent(Long eventId) {
+        PaymentEvent event = attachedQuery()
+                .from(QPaymentEvent.paymentEvent)
+                .where(QPaymentEvent.paymentEvent.id.eq(eventId)).uniqueResult(QPaymentEvent.paymentEvent);
+        if(event == null) {
+            throw new RuntimeException("Event #" + eventId + " is not found");
+        }
+        return event;
     }
 }

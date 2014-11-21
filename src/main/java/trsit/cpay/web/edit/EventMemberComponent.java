@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -15,7 +17,6 @@ import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import trsit.cpay.persistence.dao.UserDAO;
@@ -25,12 +26,11 @@ import trsit.cpay.persistence.model.User;
  * @author black
  *
  */
-public class EventMemberComponent extends FormComponentPanel<EventMemberItem> {
+public abstract class EventMemberComponent extends FormComponentPanel<EventMemberItem> {
     private static final long serialVersionUID = 1L;
 
     @SpringBean
     private UserDAO userDAO;
-    
 
     private static class UserViewBeanRenderer implements IChoiceRenderer<UserViewBean> {
         private static final long serialVersionUID = 1L;
@@ -46,23 +46,15 @@ public class EventMemberComponent extends FormComponentPanel<EventMemberItem> {
         }
     }
 
-    public EventMemberComponent(String id, IModel<EventMemberItem> model) {
+    public EventMemberComponent(String id, IModel<EventMemberItem> model, boolean removeControlEnabled) {
         super(id, model);
 
-        setDefaultModel(new CompoundPropertyModel<EventMemberItem>(model));
-        final DropDownChoice<UserViewBean> userSelector =  new DropDownChoice<UserViewBean>(
-                "user", getUserViews(), new UserViewBeanRenderer()) {
 
-                    private static final long serialVersionUID = 1L;
-/*
-                    protected boolean wantOnSelectionChangedNotifications() { return true; }
-                    
-                    @Override
-                    protected void onSelectionChanged(UserViewBean newSelection) {
-                        super.onSelectionChanged(newSelection);
-                    }
-*/
-        };
+        setDefaultModel(new CompoundPropertyModel<EventMemberItem>(model));
+        
+        // User selector
+        final DropDownChoice<UserViewBean> userSelector =  new DropDownChoice<UserViewBean>(
+                "user", getUserViews(), new UserViewBeanRenderer());
         userSelector.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             private static final long serialVersionUID = 1L;
 
@@ -74,9 +66,43 @@ public class EventMemberComponent extends FormComponentPanel<EventMemberItem> {
         userSelector.setOutputMarkupId(true);
         add(userSelector);
 
+        // Payment input
         NumberTextField<Integer> paymentInput = new NumberTextField<Integer>("paymentValue");
         add(paymentInput);
+        
+        // 'Add' control
+        add(new AjaxLink<Void>("add") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onAddEventItem(target);
+                
+            }
+            
+        });
+        // 'Delete' control
+        AjaxLink<Void> deleteLink = new AjaxLink<Void>("delete") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                onDeleteEventItem(target);
+                
+            }
+            
+        };
+        if(!removeControlEnabled) {
+            deleteLink.add(new AttributeAppender("style", "display:none;"));
+        }
+        add(deleteLink);
+        
     }
+
+
+    protected abstract void onDeleteEventItem(AjaxRequestTarget target);
+
+    protected abstract void onAddEventItem(AjaxRequestTarget target);
 
 
     private IModel<List<UserViewBean>> getUserViews() {

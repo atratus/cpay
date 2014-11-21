@@ -7,24 +7,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
 
+import lombok.Data;
+
 /**
  * @author black
  *
  */
 @MappedSuperclass
+@Data
 public abstract class Persistent {
-    private Long id;
-
     @Id
     @GeneratedValue
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    
+    private Long id;
 
 }

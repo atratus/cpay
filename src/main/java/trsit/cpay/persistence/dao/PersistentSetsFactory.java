@@ -29,7 +29,7 @@ public class PersistentSetsFactory {
 
     public <T> ItemsSet<T> buildSet(JPQLQuery query,
             Expression<T> resultExpression) {
-        return new PersistentItemsSet<T>(sessionFactory,
+        return new HibernatePersistentItemsSet<T>(sessionFactory,
                 transactionTemplate, query, resultExpression);
     }
 
