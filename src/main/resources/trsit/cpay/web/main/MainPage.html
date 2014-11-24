@@ -6,6 +6,7 @@
 
     <script type="text/javascript">
     function init() {
+        
         $().ready(function(){
     	 $(".table th").addClass("ui-state-default");
     	 $(".table td").addClass("ui-widget-content");
@@ -19,7 +20,8 @@
     	 
     	});
 
-    }
+    };
+
     </script>
 
 </wicket:head>
@@ -32,7 +34,7 @@
             <a wicket:id="add" href="#"><wicket:message key="add" /></a>
         </div>
         <div class="content">
-            <table cellspacing="0" wicket:id="events" class="table"></table>
+            <table cellspacing="0" wicket:id="events" class="table events"></table>
         </div>
     </wicket:extend>
 </body>

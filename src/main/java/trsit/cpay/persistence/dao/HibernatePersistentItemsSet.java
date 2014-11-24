@@ -3,6 +3,8 @@
  */
 package trsit.cpay.persistence.dao;
 
+import java.io.Serializable;
+
 import org.hibernate.SessionFactory;
 import org.springframework.transaction.support.TransactionTemplate;
 
@@ -16,7 +18,9 @@ import com.mysema.query.types.Expression;
  * @author black
  *
  */
-public class HibernatePersistentItemsSet<T> extends AbstractPersistentItemsSet<T> {
+public class HibernatePersistentItemsSet<T> extends AbstractPersistentItemsSet<T> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     private final JPQLQuery query;
     private SessionFactory sessionFactory;
     private final long from;

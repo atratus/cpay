@@ -8,3 +8,4 @@ insert into PaymentEvent (id,title, creationtimestamp) values (12, 'Event Third'
 insert into PaymentEvent (id,title, creationtimestamp) values (13, 'Event Fourth', CURRENT_TIMESTAMP);
 
 -- select * from PaymentEvent
+-- select * from Payment

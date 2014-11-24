@@ -4,8 +4,9 @@
 package trsit.cpay.persistence.model;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -31,9 +32,9 @@ public class PaymentEvent extends Persistent {
     private String title;
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    private Date creationTimestamp;
+    private Date creationTimestamp = new Date();
 
-    @OneToMany(mappedBy = Payment.FIELD_PAYMENT_EVENT)
-    private Set<Payment> payments;
+    @OneToMany(mappedBy = Payment.FIELD_PAYMENT_EVENT, orphanRemoval = true, cascade = CascadeType.ALL)
+    private List<Payment> payments;
     
 }

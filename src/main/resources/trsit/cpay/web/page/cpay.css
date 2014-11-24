@@ -30,3 +30,21 @@
 .userSelector {
     width:200px;
 }
+.properties {
+    margin-bottom:5px;
+    margin-top:5px;
+    /*border:1px solid black;*/
+}
+label {
+    padding-right:5px;
+}
+.actions a {
+    padding-right:5px;
+    padding-left:5px;
+}
+.title-cell {
+    width: 100%;
+}
+.events {
+    white-space: nowrap;
+}

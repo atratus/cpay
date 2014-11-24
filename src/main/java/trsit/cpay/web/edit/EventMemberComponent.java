@@ -10,6 +10,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -28,6 +29,14 @@ import trsit.cpay.persistence.model.User;
  */
 public abstract class EventMemberComponent extends FormComponentPanel<EventMemberItem> {
     private static final long serialVersionUID = 1L;
+
+    private static class DummyAjaxComponentBehavior extends AjaxFormComponentUpdatingBehavior {
+        public DummyAjaxComponentBehavior(String event) {
+            super(event);
+        }
+        private static final long serialVersionUID = 1L;
+        protected void onUpdate(AjaxRequestTarget target) {}
+    };
 
     @SpringBean
     private UserDAO userDAO;
@@ -55,19 +64,13 @@ public abstract class EventMemberComponent extends FormComponentPanel<EventMembe
         // User selector
         final DropDownChoice<UserViewBean> userSelector =  new DropDownChoice<UserViewBean>(
                 "user", getUserViews(), new UserViewBeanRenderer());
-        userSelector.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-            private static final long serialVersionUID = 1L;
-
-            protected void onUpdate(AjaxRequestTarget target) {
-
-            }
-        });
-
+        userSelector.add(new DummyAjaxComponentBehavior("onchange"));
         userSelector.setOutputMarkupId(true);
         add(userSelector);
 
         // Payment input
         NumberTextField<Integer> paymentInput = new NumberTextField<Integer>("paymentValue");
+        paymentInput.add(new DummyAjaxComponentBehavior("onchange"));
         add(paymentInput);
         
         // 'Add' control
@@ -81,6 +84,7 @@ public abstract class EventMemberComponent extends FormComponentPanel<EventMembe
             }
             
         });
+        
         // 'Delete' control
         AjaxLink<Void> deleteLink = new AjaxLink<Void>("delete") {
             private static final long serialVersionUID = 1L;

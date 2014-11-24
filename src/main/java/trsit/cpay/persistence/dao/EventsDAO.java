@@ -5,6 +5,7 @@ package trsit.cpay.persistence.dao;
 
 import javax.inject.Inject;
 
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +26,7 @@ public class EventsDAO extends AbstractDAO {
     private PersistentSetsFactory persistentSetsFactory;
 
     public ItemsSet<PaymentEvent> getEvents() {
-        JPQLQuery query = detachedQuery().from(QPaymentEvent.paymentEvent);
+        JPQLQuery query = detachedQuery().from(QPaymentEvent.paymentEvent).orderBy(QPaymentEvent.paymentEvent.creationTimestamp.desc());
 
         return persistentSetsFactory.buildSet(query, QPaymentEvent.paymentEvent);
     }
@@ -38,6 +39,18 @@ public class EventsDAO extends AbstractDAO {
         if(event == null) {
             throw new RuntimeException("Event #" + eventId + " is not found");
         }
+        Hibernate.initialize(event.getPayments());
         return event;
     }
+
+    @Transactional
+    public void save(PaymentEvent paymentEvent) {
+        saveOrUpdate(paymentEvent);
+    }
+
+    @Transactional
+    public void removeEvent(Long id) {
+        remove(PaymentEvent.class, id);
+    }
+
 }
