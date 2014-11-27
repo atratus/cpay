@@ -13,17 +13,18 @@
 </wicket:head>
 <body class="main" onload="init()">
     <wicket:extend>
-    <fieldset class="properties">
-        <label for="eventTitle"><wicket:message key="event.title"/>:</label><input id="eventTitle" wicket:id="eventTitle" type="text"/>
-    </fieldset>
-
-    <fieldset wicket:id="eventItemsContainer">
-        <div wicket:id="eventItems">
-            <div wicket:id="eventMemberItem"></div>
-        </div>
-    </fieldset>
-    <input wicket:id="submit" type="button" value="Save/Update"/>
-
+    <form wicket:id="eventForm">
+        <fieldset class="properties">
+            <label for="eventTitle"><wicket:message key="event.title"/>:</label><input id="eventTitle" wicket:id="eventTitle" type="text"/>
+        </fieldset>
+    
+        <fieldset wicket:id="eventItemsContainer">
+            <div wicket:id="eventItems">
+                <div wicket:id="eventMemberItem"></div>
+            </div>
+        </fieldset>
+        <input wicket:id="submit" type="button" value="Save/Update"/>
+    </form>
     </wicket:extend>
 </body>
 </html>

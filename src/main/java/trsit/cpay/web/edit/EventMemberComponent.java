@@ -10,7 +10,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
-
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.FormComponentPanel;
 import org.apache.wicket.markup.html.form.IChoiceRenderer;
@@ -35,11 +34,14 @@ public abstract class EventMemberComponent extends FormComponentPanel<EventMembe
             super(event);
         }
         private static final long serialVersionUID = 1L;
-        protected void onUpdate(AjaxRequestTarget target) {}
+        protected void onUpdate(AjaxRequestTarget target) {
+            
+        }
     };
 
     @SpringBean
     private UserDAO userDAO;
+    private NumberTextField<Integer> paymentInput;
 
     private static class UserViewBeanRenderer implements IChoiceRenderer<UserViewBean> {
         private static final long serialVersionUID = 1L;
@@ -69,7 +71,7 @@ public abstract class EventMemberComponent extends FormComponentPanel<EventMembe
         add(userSelector);
 
         // Payment input
-        NumberTextField<Integer> paymentInput = new NumberTextField<Integer>("paymentValue");
+        paymentInput = new NumberTextField<Integer>("paymentValue");
         paymentInput.add(new DummyAjaxComponentBehavior("onchange"));
         add(paymentInput);
         
@@ -107,6 +109,13 @@ public abstract class EventMemberComponent extends FormComponentPanel<EventMembe
     protected abstract void onDeleteEventItem(AjaxRequestTarget target);
 
     protected abstract void onAddEventItem(AjaxRequestTarget target);
+
+
+    @Override
+    protected void convertInput() {
+
+        setConvertedInput(getModelObject());
+    }
 
 
     private IModel<List<UserViewBean>> getUserViews() {
