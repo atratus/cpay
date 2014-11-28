@@ -3,6 +3,7 @@
  */
 package trsit.cpay.persistence.model;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -30,11 +31,14 @@ import lombok.experimental.Builder;
 @Setter
 public class PaymentEvent extends Persistent {
     private String title;
+    
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationTimestamp = new Date();
 
     @OneToMany(mappedBy = Payment.FIELD_PAYMENT_EVENT, orphanRemoval = true, cascade = CascadeType.ALL)
     private List<Payment> payments;
-    
+
+    @Column(nullable = false)
+    private BigDecimal totalValue;
 }

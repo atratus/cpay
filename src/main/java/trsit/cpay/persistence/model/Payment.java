@@ -5,6 +5,7 @@ package trsit.cpay.persistence.model;
 
 import java.math.BigDecimal;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -31,6 +32,7 @@ public class Payment extends Persistent {
     @ManyToOne
     private User user;
     
+    @Column(nullable = false)
     private BigDecimal value;
     
     @ManyToOne
