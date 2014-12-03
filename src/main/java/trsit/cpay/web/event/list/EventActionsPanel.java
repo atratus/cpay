@@ -1,7 +1,7 @@
 /**
  * 
  */
-package trsit.cpay.web.main;
+package trsit.cpay.web.event.list;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;

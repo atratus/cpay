@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package trsit.cpay.persistence.dao;
 
@@ -22,7 +22,7 @@ public class HibernatePersistentItemsSet<T> extends AbstractPersistentItemsSet<T
 
     private static final long serialVersionUID = 1L;
     private final JPQLQuery query;
-    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
     private final long from;
     private final long to;
     private final TransactionTemplate transactionTemplate;
@@ -43,8 +43,8 @@ public class HibernatePersistentItemsSet<T> extends AbstractPersistentItemsSet<T
             TransactionTemplate transactionTemplate, JPQLQuery query,
             Expression<T> resultExpression) {
         this(sessionFactory,
-                 transactionTemplate, -0, -1, query,
-                 resultExpression);
+                transactionTemplate, -0, -1, query,
+                resultExpression);
     }
 
     @Override
@@ -55,6 +55,7 @@ public class HibernatePersistentItemsSet<T> extends AbstractPersistentItemsSet<T
                 newFrom, newTo, query, resultExpression);
     }
 
+    @Override
     protected JPQLQuery getAtachedQuery() {
         return ((HibernateQuery) query).clone(sessionFactory
                 .getCurrentSession());

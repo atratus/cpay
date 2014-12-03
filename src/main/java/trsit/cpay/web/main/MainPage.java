@@ -17,6 +17,7 @@ import org.apache.wicket.model.Model;
 import trsit.cpay.web.edit.EditEvent;
 import trsit.cpay.web.event.list.EventsListPanel;
 import trsit.cpay.web.page.Layout;
+import trsit.cpay.web.user.list.UserListPanel;
 
 /**
  * @author black
@@ -34,7 +35,6 @@ public class MainPage extends Layout {
             @Override
             public void onClick() {
                 setResponsePage(EditEvent.class);
-
             }
         });
 
@@ -42,13 +42,22 @@ public class MainPage extends Layout {
 
     private Component createTabbedPanel(String tabbedPanelId) {
         List<ITab> tabs = new ArrayList<ITab>();
-        tabs.add(new AbstractTab(new Model<String>("first tab"))
+        tabs.add(new AbstractTab(new Model<String>("Events"))
         {
             private static final long serialVersionUID = 1L;
 
             @Override
             public Panel getPanel(String panelId) {
                 return new EventsListPanel(panelId);
+            }
+        });
+        tabs.add(new AbstractTab(new Model<String>("Users"))
+        {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Panel getPanel(String panelId) {
+                return new UserListPanel(panelId);
             }
         });
 

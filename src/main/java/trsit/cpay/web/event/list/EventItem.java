@@ -1,4 +1,4 @@
-package trsit.cpay.web.main;
+package trsit.cpay.web.event.list;
 
 import java.io.Serializable;
 import java.util.Date;

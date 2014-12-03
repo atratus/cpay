@@ -26,9 +26,6 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import trsit.cpay.persistence.dao.EventsDAO;
 import trsit.cpay.web.edit.EditEvent;
-import trsit.cpay.web.main.EventActionsPanel;
-import trsit.cpay.web.main.EventItem;
-import trsit.cpay.web.main.EventsProvider;
 
 /**
  * @author black
@@ -44,6 +41,7 @@ public class EventsListPanel extends Panel {
 
     private DefaultDataTable<EventItem, String> eventsTable;
 
+    @Deprecated
     private abstract static class CustomStyledColumn<T, S> extends AbstractColumn<T, S> {
 
         public CustomStyledColumn(IModel<String> displayModel) {
@@ -77,7 +75,7 @@ public class EventsListPanel extends Panel {
     }
 
     private Component createEventsTable(String tableComponentName) {
-        List<IColumn<EventItem, String>> columns = new ArrayList<IColumn<EventItem, String>>();
+        List<IColumn<EventItem, String>> columns = new ArrayList<>();
 
         columns.add(new CustomStyledColumn<EventItem, String>(new Model<String>("Title")) {
             private static final long serialVersionUID = 1L;
@@ -143,7 +141,7 @@ public class EventsListPanel extends Panel {
 
         eventsTable =
                 new DefaultDataTable<EventItem, String>(tableComponentName, columns, new EventsProvider(
-                        eventsDAO.getEvents()), ROWS_PER_PAGE);
+                        eventsDAO), ROWS_PER_PAGE);
         eventsTable.setOutputMarkupId(true);
         return eventsTable;
     }

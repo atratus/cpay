@@ -1,4 +1,4 @@
-package trsit.cpay.web.main;
+package trsit.cpay.web.event.list;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -8,25 +8,25 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvid
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import trsit.cpay.data.ItemsSet;
+import trsit.cpay.persistence.dao.EventsDAO;
 import trsit.cpay.persistence.model.PaymentEvent;
 
 public class EventsProvider extends SortableDataProvider<EventItem, String> {
     private static final long serialVersionUID = 1L;
 
-    private ItemsSet<PaymentEvent> events;
-    
+    private EventsDAO eventDAO;
+
     /**
      * @param mainPage
      */
-    public EventsProvider(ItemsSet<PaymentEvent> events) {
-        this.events = events;
+    public EventsProvider(EventsDAO eventDAO) {
+        this.eventDAO = eventDAO;
     }
 
     @Override
     public Iterator<? extends EventItem> iterator(long first, long count) {
-        Collection<EventItem> items = new ArrayList<EventItem>();
-        for(PaymentEvent event: events.subset(first, first + count)) {
+        Collection<EventItem> items = new ArrayList<>();
+        for(PaymentEvent event: eventDAO.getEvents().subset(first, first + count)) {
             items.add(EventItem.builder()
                     .title(event.getTitle())
                     .creationTimestamp(event.getCreationTimestamp())
@@ -38,7 +38,7 @@ public class EventsProvider extends SortableDataProvider<EventItem, String> {
 
     @Override
     public long size() {
-        return events.getSize();
+        return eventDAO.getEvents().getSize();
     }
 
     @Override
