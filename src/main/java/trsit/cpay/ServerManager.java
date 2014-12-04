@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package trsit.cpay;
 
@@ -22,13 +22,12 @@ import trsit.cpay.web.CPayApplication;
 
 /**
  * @author black
- *
  */
 @Service
 public class ServerManager {
     @Inject
     private ApplicationContext appCtx;
-    
+
     private final static Logger log = LoggerFactory.getLogger(ServerManager.class);
 
     @PostConstruct
@@ -38,7 +37,7 @@ public class ServerManager {
         WebAppContext appCtx = new WebAppContext();
         appCtx.setContextPath("/cpay");
         appCtx.setResourceBase(".");
-        
+
         FilterHolder wicketFilterHolder = appCtx.addFilter(WicketFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
         wicketFilterHolder.setInitParameter("applicationClassName", CPayApplication.class.getName());
         wicketFilterHolder.setInitParameter(WicketFilter.FILTER_MAPPING_PARAM, "/*");
@@ -48,7 +47,7 @@ public class ServerManager {
 
         log.info("Context constructed");
     }
-    
+
     private static int getPort() {
         return Integer.parseInt(System.getProperty("cpay.port", "8081"));
     }

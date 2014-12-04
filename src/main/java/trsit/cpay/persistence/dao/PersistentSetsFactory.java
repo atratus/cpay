@@ -1,17 +1,15 @@
 /**
- * 
+ *
  */
 package trsit.cpay.persistence.dao;
 
 import javax.inject.Inject;
 
-import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import trsit.cpay.data.ItemsSet;
 
-import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.types.Expression;
 
 /**
@@ -22,15 +20,10 @@ import com.mysema.query.types.Expression;
 public class PersistentSetsFactory {
 
     @Inject
-    private SessionFactory sessionFactory;
-
-    @Inject
     private TransactionTemplate transactionTemplate;
 
-    public <T> ItemsSet<T> buildSet(JPQLQuery query,
-            Expression<T> resultExpression) {
-        return new HibernatePersistentItemsSet<T>(sessionFactory,
-                transactionTemplate, query, resultExpression);
+    public <T> ItemsSet<T> buildSet(Expression<T> resultExpression, QueryProvider queryProvider) {
+        return new PersistentItemsSet<T>(transactionTemplate, queryProvider, resultExpression);
     }
 
 }

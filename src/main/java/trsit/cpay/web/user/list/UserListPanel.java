@@ -34,22 +34,22 @@ public class UserListPanel extends Panel {
     @SpringBean
     private UserDAO userDAO;
 
-    public UserListPanel(String id) {
+    public UserListPanel(final String id) {
         super(id);
         add(createUsersTable("users"));
 
     }
 
     @Override
-    public void onEvent(IEvent<?> event) {
+    public void onEvent(final IEvent<?> event) {
         if(event.getPayload() instanceof AjaxRequestTarget) {
             ((AjaxRequestTarget)event.getPayload()).appendJavaScript("init();");
         }
     }
 
-    private Component createUsersTable(String tableComponentName) {
+    private Component createUsersTable(final String tableComponentName) {
 
-        List<IColumn<UserItem, String>> columns = new ArrayList<>();
+        final List<IColumn<UserItem, String>> columns = new ArrayList<>();
 
 
         columns.add(new AbstractColumn<UserItem, String>(new Model<String>("Name")) {
@@ -57,10 +57,10 @@ public class UserListPanel extends Panel {
 
             @Override
             public void populateItem(
-                    Item<ICellPopulator<UserItem>> cellItem,
-                    String componentId,
-                    IModel<UserItem> rowModel) {
-                UserItem data = rowModel.getObject();
+                    final Item<ICellPopulator<UserItem>> cellItem,
+                    final String componentId,
+                    final IModel<UserItem> rowModel) {
+                final UserItem data = rowModel.getObject();
                 cellItem.add(new Label(componentId, data.getName()));
             }
 
@@ -70,10 +70,10 @@ public class UserListPanel extends Panel {
 
             @Override
             public void populateItem(
-                    Item<ICellPopulator<UserItem>> cellItem,
-                    String componentId,
-                    IModel<UserItem> rowModel) {
-                UserItem data = rowModel.getObject();
+                    final Item<ICellPopulator<UserItem>> cellItem,
+                    final String componentId,
+                    final IModel<UserItem> rowModel) {
+                final UserItem data = rowModel.getObject();
                 cellItem.add(new Label(componentId, data.getDebt()));
             }
 
@@ -81,7 +81,7 @@ public class UserListPanel extends Panel {
 
         final DefaultDataTable<UserItem, String> usersTable =
                 new DefaultDataTable<UserItem, String>(tableComponentName, columns, new UsersProvider(
-                        userDAO), ROWS_PER_PAGE);
+                        userDAO.getUsers()), ROWS_PER_PAGE);
         usersTable.setOutputMarkupId(true);
         return usersTable;
 

@@ -11,7 +11,7 @@ import org.apache.wicket.extensions.markup.html.repeater.util.SortableDataProvid
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import trsit.cpay.persistence.dao.UserDAO;
+import trsit.cpay.data.ItemsSet;
 import trsit.cpay.persistence.model.User;
 
 /**
@@ -20,18 +20,18 @@ import trsit.cpay.persistence.model.User;
  */
 public class UsersProvider  extends SortableDataProvider<UserItem, String>  {
 
-    private final UserDAO userDAO;
+    private final ItemsSet<User> users;
 
-    public UsersProvider(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public UsersProvider(final ItemsSet<User> users) {
+        this.users = users;
     }
 
     private static final long serialVersionUID = 1L;
 
     @Override
-    public Iterator<? extends UserItem> iterator(long first, long count) {
-        Collection<UserItem> userViews = new ArrayList<>();
-        for(User persistedUser: userDAO.getUsers().subset(first, first + count)) {
+    public Iterator<? extends UserItem> iterator(final long first, final long count) {
+        final Collection<UserItem> userViews = new ArrayList<>();
+        for(final User persistedUser: users.subset(first, first + count)) {
             userViews.add(UserItem.builder() //
                     .name(persistedUser.getName()) //
                     .build());
@@ -41,11 +41,11 @@ public class UsersProvider  extends SortableDataProvider<UserItem, String>  {
 
     @Override
     public long size() {
-        return userDAO.getUsers().getSize();
+        return users.getSize();
     }
 
     @Override
-    public IModel<UserItem> model(UserItem object) {
+    public IModel<UserItem> model(final UserItem object) {
         return new Model<UserItem>(object);
     }
 

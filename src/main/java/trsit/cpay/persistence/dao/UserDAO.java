@@ -1,10 +1,11 @@
 /**
- * 
+ *
  */
 package trsit.cpay.persistence.dao;
 
 import javax.inject.Inject;
 
+import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
 import trsit.cpay.data.ItemsSet;
@@ -20,16 +21,25 @@ import com.mysema.query.jpa.hibernate.HibernateQuery;
  *
  */
 @Repository
-public class UserDAO {
+public class UserDAO  extends AbstractDAO {
     @Inject
     private PersistentSetsFactory persistentSetsFactory;
 
+    private static class UsersQueryProvider implements QueryProvider {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public JPQLQuery getQuery(final Session session) {
+            return new HibernateQuery(session).from(QUser.user);
+        }
+
+    }
     /**
      * @see trsit.cpay.persistence.dao.UserDAO#getUsers()
      */
     public ItemsSet<User> getUsers() {
-        JPQLQuery query = new HibernateQuery().from(QUser.user);
-        return persistentSetsFactory.buildSet(query, QUser.user);
+
+        return persistentSetsFactory.buildSet(QUser.user, new UsersQueryProvider());
     }
 
 }

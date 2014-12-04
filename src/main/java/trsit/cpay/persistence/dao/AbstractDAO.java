@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package trsit.cpay.persistence.dao;
 
@@ -16,32 +16,32 @@ import com.mysema.query.jpa.hibernate.HibernateQuery;
  *
  */
 public class AbstractDAO {
-    
+
     @Inject
     private SessionFactory sessionFactory;
-    
+
     protected JPQLQuery attachedQuery() {
         return new HibernateQuery(sessionFactory.getCurrentSession());
     }
-    
-    protected JPQLQuery detachedQuery() {
-        return new HibernateQuery();
+
+    protected JPQLQuery query() {
+        return new HibernateQuery(sessionFactory.getCurrentSession());
     }
-    
+
     @SuppressWarnings("unchecked")
     protected <T> T attach(T entity) {
         return (T) sessionFactory.getCurrentSession().merge(entity);
     }
-    
+
     protected void saveOrUpdate(Object entity) {
         sessionFactory.getCurrentSession().saveOrUpdate(entity);
     }
-    
+
     protected void remove(Class<?> entityClass, Long id) {
         Session session = sessionFactory.getCurrentSession();
         Object entity  = session.load(entityClass, id);
         session.delete(entity);
-        
+
     }
 
 }

@@ -44,7 +44,7 @@ public class EventsListPanel extends Panel {
     @Deprecated
     private abstract static class CustomStyledColumn<T, S> extends AbstractColumn<T, S> {
 
-        public CustomStyledColumn(IModel<String> displayModel) {
+        public CustomStyledColumn(final IModel<String> displayModel) {
             super(displayModel);
         }
 
@@ -53,7 +53,7 @@ public class EventsListPanel extends Panel {
     /**
      * Constructor.
      */
-    public EventsListPanel(String id) {
+    public EventsListPanel(final String id) {
         super(id);
 
         add(createEventsTable("events"));
@@ -61,31 +61,31 @@ public class EventsListPanel extends Panel {
     }
 
     @Override
-    public void renderHead(IHeaderResponse response) {
+    public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
         response.render(JavaScriptHeaderItem.forScript("init()", "init"));
 
     }
 
     @Override
-    public void onEvent(IEvent<?> event) {
+    public void onEvent(final IEvent<?> event) {
         if(event.getPayload() instanceof AjaxRequestTarget) {
             ((AjaxRequestTarget)event.getPayload()).appendJavaScript("init();");
         }
     }
 
-    private Component createEventsTable(String tableComponentName) {
-        List<IColumn<EventItem, String>> columns = new ArrayList<>();
+    private Component createEventsTable(final String tableComponentName) {
+        final List<IColumn<EventItem, String>> columns = new ArrayList<>();
 
         columns.add(new CustomStyledColumn<EventItem, String>(new Model<String>("Title")) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public void populateItem(
-                    Item<ICellPopulator<EventItem>> cellItem,
-                    String componentId,
-                    IModel<EventItem> rowModel) {
-                EventItem data = rowModel.getObject();
+                    final Item<ICellPopulator<EventItem>> cellItem,
+                    final String componentId,
+                    final IModel<EventItem> rowModel) {
+                final EventItem data = rowModel.getObject();
                 cellItem.add(new Label(componentId, data.getTitle()));
             }
 
@@ -100,10 +100,10 @@ public class EventsListPanel extends Panel {
 
             @Override
             public void populateItem(
-                    Item<ICellPopulator<EventItem>> cellItem,
-                    String componentId,
-                    IModel<EventItem> rowModel) {
-                EventItem data = rowModel.getObject();
+                    final Item<ICellPopulator<EventItem>> cellItem,
+                    final String componentId,
+                    final IModel<EventItem> rowModel) {
+                final EventItem data = rowModel.getObject();
                 cellItem.add(new Label(componentId, new SimpleDateFormat("dd-MM-yyyy hh:mm").format(data
                         .getCreationTimestamp())));
 
@@ -116,20 +116,20 @@ public class EventsListPanel extends Panel {
             @Override
             public void populateItem(
                     final Item<ICellPopulator<EventItem>> cellItem,
-                    String componentId,
+                    final String componentId,
                     final IModel<EventItem> rowModel) {
                 cellItem.add(new EventActionsPanel(componentId) {
                     private static final long serialVersionUID = 1L;
 
                     @Override
-                    protected void onRemoveTriggered(AjaxRequestTarget target) {
+                    protected void onRemoveTriggered(final AjaxRequestTarget target) {
                         removeEvent(rowModel.getObject().getId());
                         target.add(eventsTable);
                         target.appendJavaScript("init();");
                     }
 
                     @Override
-                    protected void onEditTriggered(AjaxRequestTarget target) {
+                    protected void onEditTriggered(final AjaxRequestTarget target) {
                         setResponsePage(EditEvent.class,
                                 new PageParameters().add(EditEvent.EVENT_ID, rowModel.getObject().getId()));
 
@@ -141,12 +141,12 @@ public class EventsListPanel extends Panel {
 
         eventsTable =
                 new DefaultDataTable<EventItem, String>(tableComponentName, columns, new EventsProvider(
-                        eventsDAO), ROWS_PER_PAGE);
+                        eventsDAO.getEvents()), ROWS_PER_PAGE);
         eventsTable.setOutputMarkupId(true);
         return eventsTable;
     }
 
-    private void removeEvent(Long id) {
+    private void removeEvent(final Long id) {
         eventsDAO.removeEvent(id);
     }
 
