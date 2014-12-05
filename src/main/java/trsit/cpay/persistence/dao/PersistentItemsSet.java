@@ -7,7 +7,6 @@ import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hibernate.SessionFactory;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
@@ -33,23 +32,23 @@ public class PersistentItemsSet<T> implements ItemsSet<T>, Serializable {
     private final TransactionTemplate transactionTemplate;
 
     public PersistentItemsSet(
-            TransactionTemplate transactionTemplate,
-            QueryProvider queryProvider, Expression<T> resultTuple) {
+            final TransactionTemplate transactionTemplate,
+            final QueryProvider queryProvider, final Expression<T> resultExpression) {
         this(transactionTemplate,
                 queryProvider,
-                0, -1, resultTuple);
+                0, -1, resultExpression);
     }
 
     protected PersistentItemsSet(
-            TransactionTemplate transactionTemplate,
-            QueryProvider queryProvider,
-            long from, long to, Expression<T> resultTuple) {
+            final TransactionTemplate transactionTemplate,
+            final QueryProvider queryProvider,
+            final long from, final long to, final Expression<T> resultExpression) {
         this.from = from;
         this.to = to;
         this.queryProvider = queryProvider;
 
         this.transactionTemplate = transactionTemplate;
-        this.resultExpression = resultTuple;
+        this.resultExpression = resultExpression;
     }
 
     @Override
@@ -58,23 +57,23 @@ public class PersistentItemsSet<T> implements ItemsSet<T>, Serializable {
                 .execute(new TransactionCallback<Iterator<T>>() {
 
                     @Override
-                    public Iterator<T> doInTransaction(TransactionStatus status) {
-                        JPQLQuery query = query();
+                    public Iterator<T> doInTransaction(final TransactionStatus status) {
+                        final JPQLQuery query = query();
                         query.offset((int) from);
                         if (to > from) {
                             query.limit((int) (to - from));
                         }
 
-                        List<T> items = query.list(resultExpression);
+                        final List<T> items = query.list(resultExpression);
                         return items.iterator();
                     }
                 });
     }
 
     @Override
-    public ItemsSet<T> subset(long startIncl, long endExcl) {
-        long newFrom = this.from + startIncl;
-        long newTo = this.to == -1 ? -1 : Math.min(this.to, newFrom + endExcl);
+    public ItemsSet<T> subset(final long startIncl, final long endExcl) {
+        final long newFrom = this.from + startIncl;
+        final long newTo = this.to == -1 ? -1 : Math.min(this.to, newFrom + endExcl);
         return new PersistentItemsSet<T>(transactionTemplate, queryProvider,
                 newFrom, newTo,  resultExpression);
     }
@@ -85,7 +84,7 @@ public class PersistentItemsSet<T> implements ItemsSet<T>, Serializable {
         return transactionTemplate.execute(new TransactionCallback<Integer>() {
 
             @Override
-            public Integer doInTransaction(TransactionStatus status) {
+            public Integer doInTransaction(final TransactionStatus status) {
 
                 return (int) query().count();
             }
@@ -94,8 +93,8 @@ public class PersistentItemsSet<T> implements ItemsSet<T>, Serializable {
 
 
     protected JPQLQuery query() {
-        SessionFactory sessionFactory = SpringContextHolder.getCtx().getBean(SessionFactory.class);
-        return queryProvider.getQuery(sessionFactory.getCurrentSession());
+        final JPQLQueryFactory queryFactory = SpringContextHolder.getCtx().getBean(JPQLQueryFactory.class);
+        return queryProvider.getQuery(queryFactory.createBaseQuery());
     }
 
 }

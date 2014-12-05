@@ -20,21 +20,21 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import trsit.cpay.persistence.dao.UserDAO;
+import trsit.cpay.persistence.dao.PaymentDAO;
 
 /**
  * @author black
  *
  */
-public class UserListPanel extends Panel {
+public class UserDebtsPanel extends Panel {
 
     private static final long serialVersionUID = 1L;
     private static final int ROWS_PER_PAGE = 15;
 
     @SpringBean
-    private UserDAO userDAO;
+    private PaymentDAO paymentDAO;
 
-    public UserListPanel(final String id) {
+    public UserDebtsPanel(final String id) {
         super(id);
         add(createUsersTable("users"));
 
@@ -49,39 +49,37 @@ public class UserListPanel extends Panel {
 
     private Component createUsersTable(final String tableComponentName) {
 
-        final List<IColumn<UserItem, String>> columns = new ArrayList<>();
+        final List<IColumn<UserDebtView, String>> columns = new ArrayList<>();
 
-
-        columns.add(new AbstractColumn<UserItem, String>(new Model<String>("Name")) {
+        columns.add(new AbstractColumn<UserDebtView, String>(new Model<String>("Name")) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public void populateItem(
-                    final Item<ICellPopulator<UserItem>> cellItem,
+                    final Item<ICellPopulator<UserDebtView>> cellItem,
                     final String componentId,
-                    final IModel<UserItem> rowModel) {
-                final UserItem data = rowModel.getObject();
-                cellItem.add(new Label(componentId, data.getName()));
+                    final IModel<UserDebtView> rowModel) {
+                final UserDebtView data = rowModel.getObject();
+                cellItem.add(new Label(componentId, data.getUserName()));
             }
-
         });
-        columns.add(new AbstractColumn<UserItem, String>(new Model<String>("Debt")) {
+        columns.add(new AbstractColumn<UserDebtView, String>(new Model<String>("Debt")) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public void populateItem(
-                    final Item<ICellPopulator<UserItem>> cellItem,
+                    final Item<ICellPopulator<UserDebtView>> cellItem,
                     final String componentId,
-                    final IModel<UserItem> rowModel) {
-                final UserItem data = rowModel.getObject();
+                    final IModel<UserDebtView> rowModel) {
+                final UserDebtView data = rowModel.getObject();
                 cellItem.add(new Label(componentId, data.getDebt()));
             }
 
         });
 
-        final DefaultDataTable<UserItem, String> usersTable =
-                new DefaultDataTable<UserItem, String>(tableComponentName, columns, new UsersProvider(
-                        userDAO.getUsers()), ROWS_PER_PAGE);
+        final DefaultDataTable<UserDebtView, String> usersTable =
+                new DefaultDataTable<UserDebtView, String>(tableComponentName, columns, new UsersDebtsProvider(
+                        paymentDAO.getUserDebts()), ROWS_PER_PAGE);
         usersTable.setOutputMarkupId(true);
         return usersTable;
 

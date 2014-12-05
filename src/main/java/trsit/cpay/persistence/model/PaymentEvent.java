@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package trsit.cpay.persistence.model;
 
@@ -31,7 +31,7 @@ import lombok.experimental.Builder;
 @Setter
 public class PaymentEvent extends Persistent {
     private String title;
-    
+
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationTimestamp = new Date();

@@ -5,8 +5,6 @@ package trsit.cpay.persistence.dao;
 
 import java.io.Serializable;
 
-import org.hibernate.Session;
-
 import com.mysema.query.jpa.JPQLQuery;
 
 
@@ -16,5 +14,5 @@ import com.mysema.query.jpa.JPQLQuery;
  */
 public interface QueryProvider extends Serializable {
 
-    JPQLQuery getQuery(final Session session);
+    JPQLQuery getQuery(final JPQLQuery query);
 }

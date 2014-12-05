@@ -17,7 +17,7 @@ import org.apache.wicket.model.Model;
 import trsit.cpay.web.edit.EditEvent;
 import trsit.cpay.web.event.list.EventsListPanel;
 import trsit.cpay.web.page.Layout;
-import trsit.cpay.web.user.list.UserListPanel;
+import trsit.cpay.web.user.list.UserDebtsPanel;
 
 /**
  * @author black
@@ -57,7 +57,7 @@ public class MainPage extends Layout {
 
             @Override
             public Panel getPanel(String panelId) {
-                return new UserListPanel(panelId);
+                return new UserDebtsPanel(panelId);
             }
         });
 

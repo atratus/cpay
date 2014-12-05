@@ -6,7 +6,6 @@ package trsit.cpay.persistence.dao;
 import javax.inject.Inject;
 
 import org.hibernate.Hibernate;
-import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,7 +14,6 @@ import trsit.cpay.persistence.model.PaymentEvent;
 import trsit.cpay.persistence.model.QPaymentEvent;
 
 import com.mysema.query.jpa.JPQLQuery;
-import com.mysema.query.jpa.hibernate.HibernateQuery;
 
 /**
  * @author black
@@ -30,8 +28,8 @@ public class EventsDAO extends AbstractDAO {
         private static final long serialVersionUID = 1L;
 
         @Override
-        public JPQLQuery getQuery(final Session session) {
-            return new HibernateQuery(session).from(QPaymentEvent.paymentEvent).orderBy(QPaymentEvent.paymentEvent.creationTimestamp.desc());
+        public JPQLQuery getQuery(final JPQLQuery query) {
+            return query.from(QPaymentEvent.paymentEvent).orderBy(QPaymentEvent.paymentEvent.creationTimestamp.desc());
         }
     }
 

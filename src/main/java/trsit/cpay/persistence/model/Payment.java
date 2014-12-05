@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package trsit.cpay.persistence.model;
 
@@ -28,14 +28,14 @@ import lombok.experimental.Builder;
 public class Payment extends Persistent {
 
     public final static String FIELD_PAYMENT_EVENT = "paymentEvent";
-    
+
     @ManyToOne
     private User user;
-    
+
     @Column(nullable = false)
-    private BigDecimal value;
-    
+    private BigDecimal paymentValue;
+
     @ManyToOne
     private PaymentEvent paymentEvent;
-    
+
 }

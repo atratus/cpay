@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package trsit.cpay.web.event;
 
@@ -27,16 +27,16 @@ import trsit.cpay.web.edit.UserViewBeanBuilder;
 public class EventViewManager {
     @Inject
     private EventsDAO eventsDAO;
-    
+
     /**
      * Saves eventView corresponding to eventView
      */
-    public void saveEvent(EventView eventView) {
-        PaymentEvent persistablePaymentEvent = eventView.getEventId() == null ? new PaymentEvent() : eventsDAO.loadEvent(eventView.getEventId());
-        
+    public void saveEvent(final EventView eventView) {
+        final PaymentEvent persistablePaymentEvent = eventView.getEventId() == null ? new PaymentEvent() : eventsDAO.loadEvent(eventView.getEventId());
+
         // Set Title
         persistablePaymentEvent.setTitle(eventView.getEventTitle());
-        
+
         // Set Payments
         List<Payment> payments = persistablePaymentEvent.getPayments();
         if(payments != null) {
@@ -45,33 +45,32 @@ public class EventViewManager {
             persistablePaymentEvent.setPayments(payments = new ArrayList<Payment>());
         }
         payments.addAll(buildPersistablePayments(persistablePaymentEvent, eventView.getEventItems()));
-        
+
         eventsDAO.save(persistablePaymentEvent);
     }
 
-    
     /**
      * Loads persistent event and represents it as a view.
      */
-    public EventView loadEvent(Long eventId) {
-        EventView eventView = new EventView();
-        List<EventMemberItem> items = eventView.getEventItems();
+    public EventView loadEvent(final Long eventId) {
+        final EventView eventView = new EventView();
+        final List<EventMemberItem> items = eventView.getEventItems();
         if(eventId != null) {
             //Load existing event for editing
-            PaymentEvent paymentEvent = eventsDAO.loadEvent(eventId);
-            
+            final PaymentEvent paymentEvent = eventsDAO.loadEvent(eventId);
+
             // Calculate total event's avg
-            List<Payment> persistedInvestments = ListUtils.emptyIfNull(paymentEvent.getPayments());
-            BigDecimal avg = persistedInvestments.isEmpty() ?
+            final List<Payment> persistedInvestments = ListUtils.emptyIfNull(paymentEvent.getPayments());
+            final BigDecimal avg = persistedInvestments.isEmpty() ?
                     BigDecimal.ZERO :
                         paymentEvent.getTotalValue().divide(
-                    BigDecimal.valueOf(persistedInvestments.size()), RoundingMode.HALF_UP);
+                                BigDecimal.valueOf(persistedInvestments.size()), RoundingMode.HALF_UP);
 
-            
-            for(Payment payment:persistedInvestments) {
+
+            for(final Payment payment:persistedInvestments) {
                 items.add(EventMemberItem.builder()
                         .user(UserViewBeanBuilder.from(payment.getUser()))
-                        .paymentValue(payment.getValue().add(avg))
+                        .paymentValue(payment.getPaymentValue().add(avg))
                         .build());
             }
             eventView.setEventTitle(paymentEvent.getTitle());
@@ -86,28 +85,27 @@ public class EventViewManager {
         return eventView;
     }
 
-    
+
     private List<Payment> buildPersistablePayments(
-            PaymentEvent paymentEvent, List<EventMemberItem> eventItems) {
-        List<Payment> payments = new ArrayList<>();
-        
+            final PaymentEvent paymentEvent, final List<EventMemberItem> eventItems) {
+        final List<Payment> payments = new ArrayList<>();
+
         // Calculate total event's avg
-        BigDecimal total = calculateTotalValue(eventItems);
+        final BigDecimal total = calculateTotalValue(eventItems);
         paymentEvent.setTotalValue(total);
-        BigDecimal avg = total.divide(BigDecimal.valueOf(eventItems.size()), RoundingMode.HALF_UP);
-     
+        final BigDecimal avg = total.divide(BigDecimal.valueOf(eventItems.size()), RoundingMode.HALF_UP);
 
 
-        for(EventMemberItem item:eventItems) {
+        for(final EventMemberItem item:eventItems) {
             BigDecimal investedValue = item.getPaymentValue();
             investedValue = (investedValue == null ? BigDecimal.ZERO : investedValue)
                     .subtract(avg);
             payments.add(Payment.builder()
                     .user(User.identity(item.getUser().getUserId()))
-                    .value(investedValue)
+                    .paymentValue(investedValue)
                     .paymentEvent(paymentEvent)
                     .build());
-            
+
         }
         return payments;
     }
@@ -116,12 +114,12 @@ public class EventViewManager {
     /**
      * Calculates average positive value.
      */
-    private BigDecimal calculateTotalValue(List<EventMemberItem> eventItems) {
+    private BigDecimal calculateTotalValue(final List<EventMemberItem> eventItems) {
         if(eventItems.isEmpty()) {
             return BigDecimal.ZERO;
         }
         BigDecimal total = BigDecimal.ZERO;
-        for(EventMemberItem item:eventItems) {
+        for(final EventMemberItem item:eventItems) {
             if(item.getPaymentValue() != null) {
                 total = total.add(item.getPaymentValue());
             }
