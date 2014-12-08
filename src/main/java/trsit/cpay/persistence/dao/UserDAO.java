@@ -19,7 +19,7 @@ import com.mysema.query.jpa.JPQLQuery;
 @Repository
 public class UserDAO  extends AbstractDAO {
 
-    private static class UsersQueryProvider implements QueryProvider {
+    private static class UsersQueryProvider extends SimpleCountQueryProvider  {
         private static final long serialVersionUID = 1L;
 
         @Override

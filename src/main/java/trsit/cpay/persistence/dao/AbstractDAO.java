@@ -46,6 +46,7 @@ public class AbstractDAO {
 
     }
 
+
     protected <T> ItemsSet<T> buildSet(final Expression<T> resultExpression, final QueryProvider queryProvider) {
         return persistentSetsFactory.buildSet(resultExpression, queryProvider);
     }

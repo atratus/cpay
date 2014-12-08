@@ -63,6 +63,19 @@ public class UserDebtsPanel extends Panel {
                 cellItem.add(new Label(componentId, data.getUserName()));
             }
         });
+        columns.add(new AbstractColumn<UserDebtView, String>(new Model<String>("Payment")) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void populateItem(
+                    final Item<ICellPopulator<UserDebtView>> cellItem,
+                    final String componentId,
+                    final IModel<UserDebtView> rowModel) {
+                final UserDebtView data = rowModel.getObject();
+                cellItem.add(new Label(componentId, data.getPayment()));
+            }
+
+        });
         columns.add(new AbstractColumn<UserDebtView, String>(new Model<String>("Debt")) {
             private static final long serialVersionUID = 1L;
 
@@ -74,7 +87,6 @@ public class UserDebtsPanel extends Panel {
                 final UserDebtView data = rowModel.getObject();
                 cellItem.add(new Label(componentId, data.getDebt()));
             }
-
         });
 
         final DefaultDataTable<UserDebtView, String> usersTable =

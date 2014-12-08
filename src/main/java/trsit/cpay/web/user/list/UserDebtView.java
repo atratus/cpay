@@ -19,5 +19,6 @@ public class UserDebtView implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String userName;
+    private BigDecimal payment;
     private BigDecimal debt;
 }

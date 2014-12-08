@@ -35,6 +35,9 @@ public class Payment extends Persistent {
     @Column(nullable = false)
     private BigDecimal paymentValue;
 
+    @Column(nullable = false)
+    private BigDecimal debt;
+
     @ManyToOne
     private PaymentEvent paymentEvent;
 

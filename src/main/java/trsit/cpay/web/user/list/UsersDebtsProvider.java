@@ -12,7 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import trsit.cpay.data.ItemsSet;
-import trsit.cpay.persistence.dao.UserDebt;
+import trsit.cpay.persistence.dao.UserPayment;
 
 /**
  * @author black
@@ -20,9 +20,9 @@ import trsit.cpay.persistence.dao.UserDebt;
  */
 public class UsersDebtsProvider  extends SortableDataProvider<UserDebtView, String>  {
 
-    private final ItemsSet<UserDebt> debts;
+    private final ItemsSet<UserPayment> debts;
 
-    public UsersDebtsProvider(final ItemsSet<UserDebt> debts) {
+    public UsersDebtsProvider(final ItemsSet<UserPayment> debts) {
         this.debts = debts;
     }
 
@@ -31,9 +31,10 @@ public class UsersDebtsProvider  extends SortableDataProvider<UserDebtView, Stri
     @Override
     public Iterator<? extends UserDebtView> iterator(final long first, final long count) {
         final Collection<UserDebtView> userDebtViews = new ArrayList<>();
-        for(final UserDebt persistedDebt: debts.subset(first, first + count)) {
+        for(final UserPayment persistedDebt: debts.subset(first, first + count)) {
             userDebtViews.add(UserDebtView.builder() //
                     .userName(persistedDebt.getUser().getName()) //
+                    .payment(persistedDebt.getPaymentValue()) //
                     .debt(persistedDebt.getDebt()) //
                     .build());
         }

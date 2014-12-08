@@ -14,5 +14,7 @@ import com.mysema.query.jpa.JPQLQuery;
  */
 public interface QueryProvider extends Serializable {
 
-    JPQLQuery getQuery(final JPQLQuery query);
+    JPQLQuery getQuery(final JPQLQuery baseQuery);
+
+    long getCount(final JPQLQuery baseQuery);
 }

@@ -58,7 +58,7 @@ public class PersistentItemsSet<T> implements ItemsSet<T>, Serializable {
 
                     @Override
                     public Iterator<T> doInTransaction(final TransactionStatus status) {
-                        final JPQLQuery query = query();
+                        final JPQLQuery query = queryProvider.getQuery(baseQuery());
                         query.offset((int) from);
                         if (to > from) {
                             query.limit((int) (to - from));
@@ -82,19 +82,16 @@ public class PersistentItemsSet<T> implements ItemsSet<T>, Serializable {
     @Transactional(readOnly = true)
     public int getSize() {
         return transactionTemplate.execute(new TransactionCallback<Integer>() {
-
             @Override
             public Integer doInTransaction(final TransactionStatus status) {
-
-                return (int) query().count();
+                return (int) queryProvider.getCount(baseQuery());
             }
         });
     }
 
 
-    protected JPQLQuery query() {
-        final JPQLQueryFactory queryFactory = SpringContextHolder.getCtx().getBean(JPQLQueryFactory.class);
-        return queryProvider.getQuery(queryFactory.createBaseQuery());
+    protected JPQLQuery baseQuery() {
+        return SpringContextHolder.getCtx().getBean(JPQLQueryFactory.class).createBaseQuery();
     }
 
 }

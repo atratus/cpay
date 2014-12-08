@@ -61,16 +61,12 @@ public class EventViewManager {
 
             // Calculate total event's avg
             final List<Payment> persistedInvestments = ListUtils.emptyIfNull(paymentEvent.getPayments());
-            final BigDecimal avg = persistedInvestments.isEmpty() ?
-                    BigDecimal.ZERO :
-                        paymentEvent.getTotalValue().divide(
-                                BigDecimal.valueOf(persistedInvestments.size()), RoundingMode.HALF_UP);
-
 
             for(final Payment payment:persistedInvestments) {
                 items.add(EventMemberItem.builder()
                         .user(UserViewBeanBuilder.from(payment.getUser()))
-                        .paymentValue(payment.getPaymentValue().add(avg))
+                        .paymentValue(payment.getPaymentValue())
+                        .debt(payment.getDebt())
                         .build());
             }
             eventView.setEventTitle(paymentEvent.getTitle());
@@ -92,19 +88,18 @@ public class EventViewManager {
 
         // Calculate total event's avg
         final BigDecimal total = calculateTotalValue(eventItems);
-        paymentEvent.setTotalValue(total);
-        final BigDecimal avg = total.divide(BigDecimal.valueOf(eventItems.size()), RoundingMode.HALF_UP);
-
+        paymentEvent.setTotalValue(total); //TODO: seems not needed
 
         for(final EventMemberItem item:eventItems) {
-            BigDecimal investedValue = item.getPaymentValue();
-            investedValue = (investedValue == null ? BigDecimal.ZERO : investedValue)
-                    .subtract(avg);
+            BigDecimal paymentValue = item.getPaymentValue();
+            paymentValue = (paymentValue == null ? BigDecimal.ZERO : paymentValue);
             payments.add(Payment.builder()
                     .user(User.identity(item.getUser().getUserId()))
-                    .paymentValue(investedValue)
-                    .paymentEvent(paymentEvent)
-                    .build());
+                    .paymentValue(paymentValue)
+                    .debt(paymentValue.subtract(
+                            total.divide(BigDecimal.valueOf(eventItems.size()), RoundingMode.HALF_UP)))
+                            .paymentEvent(paymentEvent)
+                            .build());
 
         }
         return payments;

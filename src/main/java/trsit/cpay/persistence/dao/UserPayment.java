@@ -13,8 +13,8 @@ import trsit.cpay.persistence.model.User;
  *
  */
 @Data
-
-public class UserDebt {
+public class UserPayment {
     private User user;
+    private BigDecimal paymentValue;
     private BigDecimal debt;
 }

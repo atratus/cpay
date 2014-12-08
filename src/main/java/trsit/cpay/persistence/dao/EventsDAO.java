@@ -24,7 +24,7 @@ public class EventsDAO extends AbstractDAO {
     @Inject
     private PersistentSetsFactory persistentSetsFactory;
 
-    private static class EventsQueryProvider implements QueryProvider {
+    private static class EventsQueryProvider extends SimpleCountQueryProvider {
         private static final long serialVersionUID = 1L;
 
         @Override
