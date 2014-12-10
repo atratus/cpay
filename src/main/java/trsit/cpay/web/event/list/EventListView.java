@@ -8,9 +8,10 @@ import lombok.experimental.Builder;
 
 @Data
 @Builder
-public class EventItem implements Serializable {
+public class EventListView implements Serializable {
     private static final long serialVersionUID = 1L;
     private String title;
     private Date creationTimestamp;
+    private String eventType;
     private Long id;
 }

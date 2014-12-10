@@ -11,25 +11,26 @@ import org.apache.wicket.model.Model;
 import trsit.cpay.data.ItemsSet;
 import trsit.cpay.persistence.model.PaymentEvent;
 
-public class EventsProvider extends SortableDataProvider<EventItem, String> {
+public class EventsProvider extends SortableDataProvider<EventListView, String> {
     private static final long serialVersionUID = 1L;
 
-    private ItemsSet<PaymentEvent> events;
+    private final ItemsSet<PaymentEvent> events;
 
     /**
      * @param mainPage
      */
-    public EventsProvider(ItemsSet<PaymentEvent> events) {
+    public EventsProvider(final ItemsSet<PaymentEvent> events) {
         this.events = events;
     }
 
     @Override
-    public Iterator<? extends EventItem> iterator(long first, long count) {
-        Collection<EventItem> items = new ArrayList<>();
-        for(PaymentEvent event: events.subset(first, first + count)) {
-            items.add(EventItem.builder()
+    public Iterator<? extends EventListView> iterator(final long first, final long count) {
+        final Collection<EventListView> items = new ArrayList<>();
+        for(final PaymentEvent event: events.subset(first, first + count)) {
+            items.add(EventListView.builder()
                     .title(event.getTitle())
                     .creationTimestamp(event.getCreationTimestamp())
+                    .eventType(event.getEventType())
                     .id(event.getId())
                     .build());
         }
@@ -42,8 +43,8 @@ public class EventsProvider extends SortableDataProvider<EventItem, String> {
     }
 
     @Override
-    public IModel<EventItem> model(EventItem object) {
-        return new Model<EventItem>(object);
+    public IModel<EventListView> model(final EventListView object) {
+        return new Model<EventListView>(object);
     }
 
 }

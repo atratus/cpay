@@ -39,16 +39,7 @@ public class EventsListPanel extends Panel {
     @SpringBean
     private EventsDAO eventsDAO;
 
-    private DefaultDataTable<EventItem, String> eventsTable;
-
-    @Deprecated
-    private abstract static class CustomStyledColumn<T, S> extends AbstractColumn<T, S> {
-
-        public CustomStyledColumn(final IModel<String> displayModel) {
-            super(displayModel);
-        }
-
-    }
+    private DefaultDataTable<EventListView, String> eventsTable;
 
     /**
      * Constructor.
@@ -75,17 +66,17 @@ public class EventsListPanel extends Panel {
     }
 
     private Component createEventsTable(final String tableComponentName) {
-        final List<IColumn<EventItem, String>> columns = new ArrayList<>();
+        final List<IColumn<EventListView, String>> columns = new ArrayList<>();
 
-        columns.add(new CustomStyledColumn<EventItem, String>(new Model<String>("Title")) {
+        columns.add(new AbstractColumn<EventListView, String>(new Model<String>("Title")) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public void populateItem(
-                    final Item<ICellPopulator<EventItem>> cellItem,
+                    final Item<ICellPopulator<EventListView>> cellItem,
                     final String componentId,
-                    final IModel<EventItem> rowModel) {
-                final EventItem data = rowModel.getObject();
+                    final IModel<EventListView> rowModel) {
+                final EventListView data = rowModel.getObject();
                 cellItem.add(new Label(componentId, data.getTitle()));
             }
 
@@ -95,29 +86,44 @@ public class EventsListPanel extends Panel {
             }
 
         });
-        columns.add(new CustomStyledColumn<EventItem, String>(new Model<String>("Date")) {
+        columns.add(new AbstractColumn<EventListView, String>(new Model<String>("Date")) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public void populateItem(
-                    final Item<ICellPopulator<EventItem>> cellItem,
+                    final Item<ICellPopulator<EventListView>> cellItem,
                     final String componentId,
-                    final IModel<EventItem> rowModel) {
-                final EventItem data = rowModel.getObject();
+                    final IModel<EventListView> rowModel) {
+                final EventListView data = rowModel.getObject();
                 cellItem.add(new Label(componentId, new SimpleDateFormat("dd-MM-yyyy hh:mm").format(data
                         .getCreationTimestamp())));
 
             }
 
         });
-        columns.add(new CustomStyledColumn<EventItem, String>(new Model<String>("")) {
+        columns.add(new AbstractColumn<EventListView, String>(new Model<String>("Event Type")) {
             private static final long serialVersionUID = 1L;
 
             @Override
             public void populateItem(
-                    final Item<ICellPopulator<EventItem>> cellItem,
+                    final Item<ICellPopulator<EventListView>> cellItem,
                     final String componentId,
-                    final IModel<EventItem> rowModel) {
+                    final IModel<EventListView> rowModel) {
+                final EventListView data = rowModel.getObject();
+                cellItem.add(new Label(componentId, data
+                        .getEventType()));
+
+            }
+
+        });
+        columns.add(new AbstractColumn<EventListView, String>(new Model<String>("")) {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void populateItem(
+                    final Item<ICellPopulator<EventListView>> cellItem,
+                    final String componentId,
+                    final IModel<EventListView> rowModel) {
                 cellItem.add(new EventActionsPanel(componentId) {
                     private static final long serialVersionUID = 1L;
 
@@ -140,7 +146,7 @@ public class EventsListPanel extends Panel {
         });
 
         eventsTable =
-                new DefaultDataTable<EventItem, String>(tableComponentName, columns, new EventsProvider(
+                new DefaultDataTable<EventListView, String>(tableComponentName, columns, new EventsProvider(
                         eventsDAO.getEvents()), ROWS_PER_PAGE);
         eventsTable.setOutputMarkupId(true);
         return eventsTable;

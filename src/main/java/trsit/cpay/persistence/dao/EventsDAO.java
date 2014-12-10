@@ -3,6 +3,10 @@
  */
 package trsit.cpay.persistence.dao;
 
+import static trsit.cpay.persistence.model.QPaymentEvent.paymentEvent;
+
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.hibernate.Hibernate;
@@ -23,6 +27,8 @@ public class EventsDAO extends AbstractDAO {
 
     @Inject
     private PersistentSetsFactory persistentSetsFactory;
+    @Inject
+    private JPQLQueryFactory jpqlQueryFactory;
 
     private static class EventsQueryProvider extends SimpleCountQueryProvider {
         private static final long serialVersionUID = 1L;
@@ -39,10 +45,10 @@ public class EventsDAO extends AbstractDAO {
 
     @Transactional(readOnly = true)
     public PaymentEvent loadEvent(final Long eventId) {
-        final PaymentEvent event = attachedQuery()
-                .from(QPaymentEvent.paymentEvent)
-                .where(QPaymentEvent.paymentEvent.id.eq(eventId)).uniqueResult(QPaymentEvent.paymentEvent);
-        if(event == null) {
+        final PaymentEvent event =
+                attachedQuery().from(QPaymentEvent.paymentEvent).where(QPaymentEvent.paymentEvent.id.eq(eventId))
+                .uniqueResult(QPaymentEvent.paymentEvent);
+        if (event == null) {
             throw new RuntimeException("Event #" + eventId + " is not found");
         }
         Hibernate.initialize(event.getPayments());
@@ -57,6 +63,12 @@ public class EventsDAO extends AbstractDAO {
     @Transactional
     public void removeEvent(final Long id) {
         remove(PaymentEvent.class, id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<String> findTypes(final String input) {
+        return jpqlQueryFactory.createBaseQuery().from(paymentEvent)
+                .where(paymentEvent.eventType.like("%" + input + "%")).distinct().list(paymentEvent.eventType);
     }
 
 }

@@ -36,6 +36,7 @@ public class EventViewManager {
 
         // Set Title
         persistablePaymentEvent.setTitle(eventView.getEventTitle());
+        persistablePaymentEvent.setEventType(eventView.getEventType());
 
         // Set Payments
         List<Payment> payments = persistablePaymentEvent.getPayments();
@@ -71,6 +72,7 @@ public class EventViewManager {
             }
             eventView.setEventTitle(paymentEvent.getTitle());
             eventView.setEventId(paymentEvent.getId());
+            eventView.setEventType(paymentEvent.getEventType());
         }
         if(items.isEmpty()) {
             items.add(EventMemberItem.builder()
@@ -80,7 +82,6 @@ public class EventViewManager {
         }
         return eventView;
     }
-
 
     private List<Payment> buildPersistablePayments(
             final PaymentEvent paymentEvent, final List<EventMemberItem> eventItems) {
@@ -120,6 +121,11 @@ public class EventViewManager {
             }
         }
         return total;
+    }
+
+    public List<String> findTypes(final String input) {
+
+        return eventsDAO.findTypes(input);
     }
 
 }

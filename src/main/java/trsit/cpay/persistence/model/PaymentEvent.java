@@ -20,6 +20,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Builder;
 
+
+
 /**
  * @author black
  */
@@ -31,6 +33,9 @@ import lombok.experimental.Builder;
 @Setter
 public class PaymentEvent extends Persistent {
     private String title;
+
+    @Column(nullable = false)
+    private String eventType;
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
