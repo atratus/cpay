@@ -123,9 +123,4 @@ public class EventViewManager {
         return total;
     }
 
-    public List<String> findTypes(final String input) {
-
-        return eventsDAO.findTypes(input);
-    }
-
 }

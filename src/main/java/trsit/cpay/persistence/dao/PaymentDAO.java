@@ -27,11 +27,22 @@ public class PaymentDAO extends AbstractDAO {
 
     private static class UserDebtsQueryProvider implements QueryProvider {
         private static final long serialVersionUID = 1L;
+        private final String eventType;
+
+        public UserDebtsQueryProvider(final String eventType) {
+
+            this.eventType = eventType;
+        }
         @Override
-        public JPQLQuery getQuery(final JPQLQuery query) {
-            return query.from(payment) //
+        public JPQLQuery getQuery(final JPQLQuery baseQuery) {
+            final JPQLQuery query = baseQuery.from(payment) //
                     .groupBy(payment.user) //
+
                     .orderBy(payment.debt.sum().asc());
+            if(eventType != null) {
+                query .where(payment.paymentEvent.eventType.eq(eventType));
+            }
+            return query;
         }
         @Override
         public long getCount(final JPQLQuery baseQuery) {
@@ -39,14 +50,14 @@ public class PaymentDAO extends AbstractDAO {
         }
     }
 
-    public ItemsSet<UserPayment> getUserDebts() {
+    public ItemsSet<UserPayment> getUserDebts(final String eventType) {
 
         return buildSet(Projections.bean(
                 UserPayment.class,
                 payment.user,
                 payment.paymentValue.sum().as("paymentValue"),
                 payment.debt.sum().as("debt")),
-                new UserDebtsQueryProvider());
+                new UserDebtsQueryProvider(eventType));
     }
 
     @Transactional(readOnly = true)

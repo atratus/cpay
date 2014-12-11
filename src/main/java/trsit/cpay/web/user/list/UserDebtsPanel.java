@@ -8,19 +8,26 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
+import trsit.cpay.data.ItemsSet;
+import trsit.cpay.persistence.dao.EventsDAO;
 import trsit.cpay.persistence.dao.PaymentDAO;
+import trsit.cpay.persistence.dao.UserPayment;
 
 /**
  * @author black
@@ -34,9 +41,37 @@ public class UserDebtsPanel extends Panel {
     @SpringBean
     private PaymentDAO paymentDAO;
 
+    @SpringBean
+    private EventsDAO eventsDAO;
+
+    private String eventType;
+
     public UserDebtsPanel(final String id) {
         super(id);
-        add(createUsersTable("users"));
+        setDefaultModel(new CompoundPropertyModel<UserDebtsPanel>(this));
+
+        final Component table = createUsersTable("users");
+        table.setOutputMarkupId(true);
+        add(table);
+
+        final DropDownChoice<String> eventFilter = new DropDownChoice<String>("eventType", new LoadableDetachableModel<List<String>>() {
+            private static final long serialVersionUID = 1L;
+            @Override
+            protected List<String> load() {
+                return eventsDAO.findTypes("");
+            }
+        });
+        eventFilter.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onUpdate(final AjaxRequestTarget target) {
+                target.add(table);
+
+            }
+        });
+        add(eventFilter);
+
 
     }
 
@@ -90,8 +125,14 @@ public class UserDebtsPanel extends Panel {
         });
 
         final DefaultDataTable<UserDebtView, String> usersTable =
-                new DefaultDataTable<UserDebtView, String>(tableComponentName, columns, new UsersDebtsProvider(
-                        paymentDAO.getUserDebts()), ROWS_PER_PAGE);
+                new DefaultDataTable<UserDebtView, String>(tableComponentName, columns, new UsersDebtsProvider() {
+
+                    @Override
+                    protected ItemsSet<UserPayment> getDebts() {
+                        return paymentDAO.getUserDebts(eventType);
+                    }
+
+                }, ROWS_PER_PAGE);
         usersTable.setOutputMarkupId(true);
         return usersTable;
 

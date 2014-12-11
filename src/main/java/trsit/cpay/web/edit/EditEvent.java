@@ -3,7 +3,6 @@
  */
 package trsit.cpay.web.edit;
 
-
 import java.util.Iterator;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -22,11 +21,11 @@ import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 
+import trsit.cpay.persistence.dao.EventsDAO;
 import trsit.cpay.web.event.EventView;
 import trsit.cpay.web.event.EventViewManager;
 import trsit.cpay.web.main.MainPage;
 import trsit.cpay.web.page.Layout;
-
 
 /**
  * @author black
@@ -42,15 +41,17 @@ public class EditEvent extends Layout {
     @SpringBean
     private EventViewManager eventManager;
 
+    @SpringBean
+    private EventsDAO eventsDAO;
+
     public EditEvent(final PageParameters pageParameters) {
 
         eventView = eventManager.loadEvent(pageParameters.get(EVENT_ID).toOptionalLong());
 
+        // setDefaultModel(new CompoundPropertyModel<EventView>(eventView));
 
-        //setDefaultModel(new CompoundPropertyModel<EventView>(eventView));
-
-        final Form<EventView> eventForm = new Form<EventView>(
-                "eventForm", new CompoundPropertyModel<EventView>(eventView)) {
+        final Form<EventView> eventForm =
+                new Form<EventView>("eventForm", new CompoundPropertyModel<EventView>(eventView)) {
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -64,10 +65,9 @@ public class EditEvent extends Layout {
                 });
             }
 
-
-
         };
-        // eventForm.setDefaultModel(new CompoundPropertyModel<EventView>(eventView));
+        // eventForm.setDefaultModel(new
+        // CompoundPropertyModel<EventView>(eventView));
 
         add(eventForm);
 
@@ -88,7 +88,7 @@ public class EditEvent extends Layout {
             @Override
             protected Iterator<String> getChoices(final String input) {
 
-                return eventManager.findTypes(input).iterator();
+                return eventsDAO.findTypes(input).iterator();
             }
 
         };
@@ -101,8 +101,6 @@ public class EditEvent extends Layout {
         });
         eventForm.add(eventType);
 
-
-
         // Events list view's container (for Ajax updates)
         final WebMarkupContainer eventItemsContainer = new WebMarkupContainer("eventItemsContainer");
         eventItemsContainer.setOutputMarkupId(true);
@@ -110,22 +108,20 @@ public class EditEvent extends Layout {
 
         // Events list view
 
-        eventItemsControl = new ListView<EventMemberItem>(
-                "eventItems") {
+        eventItemsControl = new ListView<EventMemberItem>("eventItems") {
             private static final long serialVersionUID = 1L;
+
             @Override
             protected void populateItem(final ListItem<EventMemberItem> item) {
                 /**/System.out.print("");
-                item.add(new EventMemberComponent(
-                        "eventMemberItem", item.getModel(), eventView.getEventItems().size() > 1) {
+                item.add(new EventMemberComponent("eventMemberItem", item.getModel(),
+                        eventView.getEventItems().size() > 1) {
 
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     protected void onAddEventItem(final AjaxRequestTarget target) {
-                        eventView.getEventItems().add(EventMemberItem.builder()
-                                .user(null)
-                                .build());
+                        eventView.getEventItems().add(EventMemberItem.builder().user(null).build());
                         target.add(eventItemsContainer);
                     }
 
@@ -155,6 +151,5 @@ public class EditEvent extends Layout {
 
         });
     }
-
 
 }

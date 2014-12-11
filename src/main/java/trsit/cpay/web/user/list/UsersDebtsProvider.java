@@ -18,20 +18,15 @@ import trsit.cpay.persistence.dao.UserPayment;
  * @author black
  *
  */
-public class UsersDebtsProvider  extends SortableDataProvider<UserDebtView, String>  {
+public abstract class UsersDebtsProvider  extends SortableDataProvider<UserDebtView, String>  {
 
-    private final ItemsSet<UserPayment> debts;
-
-    public UsersDebtsProvider(final ItemsSet<UserPayment> debts) {
-        this.debts = debts;
-    }
 
     private static final long serialVersionUID = 1L;
 
     @Override
     public Iterator<? extends UserDebtView> iterator(final long first, final long count) {
         final Collection<UserDebtView> userDebtViews = new ArrayList<>();
-        for(final UserPayment persistedDebt: debts.subset(first, first + count)) {
+        for(final UserPayment persistedDebt: getDebts().subset(first, first + count)) {
             userDebtViews.add(UserDebtView.builder() //
                     .userName(persistedDebt.getUser().getName()) //
                     .payment(persistedDebt.getPaymentValue()) //
@@ -41,9 +36,11 @@ public class UsersDebtsProvider  extends SortableDataProvider<UserDebtView, Stri
         return userDebtViews.iterator();
     }
 
+    protected abstract ItemsSet<UserPayment> getDebts();
+
     @Override
     public long size() {
-        return debts.getSize();
+        return getDebts().getSize();
     }
 
     @Override
