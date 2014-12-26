@@ -6,12 +6,18 @@
 
     <script type="text/javascript">
     function init() {
-
+    	$(document).tooltip({content:function(){
+    		var element = $( this );
+    		 if ( element.is( "[title]" ) ) {
+                 //alert('!'+element.attr( "title" ));
+    			 return element.attr( "title" );
+    	    }
+            return 'No comments!';
+        }});
     }
     </script>
-
 </wicket:head>
-<body class="main" onload="init()">
+<body class="main" >
     <wicket:extend>
         <form wicket:id="eventForm">
             <fieldset class="properties">
@@ -20,21 +26,20 @@
                         <td><label for="eventTitle"><wicket:message
                                     key="event.title" /> </label></td>
                         <td><input id="eventTitle"
-                            wicket:id="eventTitle" type="text" /></td>
+                            wicket:id="eventTitle" type="text" title=""/></td>
                     </TR>
 
                     <TR>
-
                         <td><label for="eventType"><wicket:message
                                     key="event.type" />: </label></td>
                         <td><input id="eventType"
-                            wicket:id="eventType" type="text" /></td>
+                            wicket:id="eventType" type="text"  title=""/></td>
                     </TR>
                 </TABLE>
             </fieldset>
 
             <fieldset wicket:id="eventItemsContainer">
-                <div wicket:id="eventItems">
+                <div wicket:id="eventItems"  title="">
                     <div wicket:id="eventMemberItem"></div>
                 </div>
             </fieldset>

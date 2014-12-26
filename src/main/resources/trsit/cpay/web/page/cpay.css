@@ -20,6 +20,27 @@
 .table {
     width:100%;
 }
+.table th {
+    border: 1px solid #CCC;
+    background-color: #CCCCCC;
+    font-weight: bold;
+    color: #1C94C4;
+}
+.even {
+    background-color: #EEEEEE;
+}
+.odd {
+    background-color: #FFFFFF;
+}
+
+.table td {
+    border: 1px solid #DDD;
+}
+
+.table tr:hover {
+    color: #C77405;
+}
+
 .options-list {
     width:100%;
     border:1px solid black;
@@ -103,4 +124,26 @@ div.tabpanel div.tab-row li.selected {
 div.tabpanel div.tab-row li.selected a {
     color:#333;
     padding-bottom:5px;
+}
+
+div.wicket-aa {
+    background-color:white;
+    border:1px solid #CCCCCC;
+    color:black;
+}
+div.wicket-aa ul {
+   list-style-image:none;
+   list-style-position:outside;
+   list-style-type:none;
+   margin:0pt;
+   padding:5px;
+}
+div.wicket-aa ul li.selected {
+    background-color:#CCCCCC;
+}
+
+
+
+.error {
+    border:1px solid red;
 }

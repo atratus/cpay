@@ -9,13 +9,11 @@ import java.util.List;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.IColumn;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.markup.repeater.Item;
@@ -54,16 +52,8 @@ public class EventsListPanel extends Panel {
     @Override
     public void renderHead(final IHeaderResponse response) {
         super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forScript("init()", "init"));
-
     }
 
-    @Override
-    public void onEvent(final IEvent<?> event) {
-        if(event.getPayload() instanceof AjaxRequestTarget) {
-            ((AjaxRequestTarget)event.getPayload()).appendJavaScript("init();");
-        }
-    }
 
     private Component createEventsTable(final String tableComponentName) {
         final List<IColumn<EventListView, String>> columns = new ArrayList<>();
@@ -131,7 +121,6 @@ public class EventsListPanel extends Panel {
                     protected void onRemoveTriggered(final AjaxRequestTarget target) {
                         removeEvent(rowModel.getObject().getId());
                         target.add(eventsTable);
-                        target.appendJavaScript("init();");
                     }
 
                     @Override

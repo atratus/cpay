@@ -5,10 +5,11 @@ package trsit.cpay.web.edit;
 
 import java.util.Iterator;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.extensions.ajax.markup.html.autocomplete.AutoCompleteTextField;
+import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.FormComponent;
@@ -20,12 +21,14 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
+import org.apache.wicket.validation.validator.StringValidator;
 
 import trsit.cpay.persistence.dao.EventsDAO;
 import trsit.cpay.web.event.EventView;
 import trsit.cpay.web.event.EventViewManager;
 import trsit.cpay.web.main.MainPage;
 import trsit.cpay.web.page.Layout;
+import trsit.cpay.web.validation.NotNullValidator;
 
 /**
  * @author black
@@ -33,8 +36,8 @@ import trsit.cpay.web.page.Layout;
 public class EditEvent extends Layout {
     private static final long serialVersionUID = 1L;
     public static final String EVENT_ID = "eventId";
-
-    private final ListView<EventMemberItem> eventItemsControl;
+    private static final int MIN_EVENT_LEN = 3;
+    private static final int MIN_TYPE_LEN = 3;
 
     private final EventView eventView;
 
@@ -48,73 +51,87 @@ public class EditEvent extends Layout {
 
         eventView = eventManager.loadEvent(pageParameters.get(EVENT_ID).toOptionalLong());
 
-        // setDefaultModel(new CompoundPropertyModel<EventView>(eventView));
-
         final Form<EventView> eventForm =
-                new Form<EventView>("eventForm", new CompoundPropertyModel<EventView>(eventView)) {
+                new Form<EventView>("eventForm", new CompoundPropertyModel<EventView>(eventView));
+
+        eventForm.setOutputMarkupId(true);
+        add(eventForm);
+
+        // Event's title:
+        eventForm.add(getEventTitle("eventTitle"));
+
+        // Event's type:
+        eventForm.add(getEventType("eventType"));
+
+        // Members
+        final WebMarkupContainer members = getMemberItems("eventItemsContainer");
+        eventForm.add(members);
+
+        // Event submission button
+        eventForm.add(new AjaxSubmitLink("submit") {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onError() {
-                visitFormComponents(new IVisitor<FormComponent<?>, Void>() {
+            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
+                form.visitFormComponents(new IVisitor<FormComponent<?>, Boolean>() {
 
                     @Override
-                    public void component(final FormComponent<?> object, final IVisit<Void> visit) {
+                    public void component(final FormComponent<?> formComponent, final IVisit<Boolean> visit) {
+
+                    }
+                });
+                eventManager.saveEvent(eventView);
+                setResponsePage(MainPage.class);
+            }
+
+            @Override
+            protected void onError(final AjaxRequestTarget target, final Form<?> form) {
+                boolean hasPayment = false;
+                for(final EventMemberItem item: eventView.getEventItems()) {
+                    if(item.getPaymentValue() != null) {
+                        hasPayment = true;
+                    }
+                }
+                if(!hasPayment) {
+                    target.appendJavaScript(
+                            "$('#"+members.getMarkupId() + "').addClass('error');");
+                    members.add(new AttributeModifier("title", "No payment specified"));
+                } else {
+                    members.add(new AttributeModifier("title", ""));
+                }
+                form.visitFormComponents(new IVisitor<FormComponent<?>, Void>() {
+
+                    @Override
+                    public void component(final FormComponent<?> formComponent, final IVisit<Void> visit) {
+                        if(formComponent.hasErrorMessage()) {
+                            target.add(eventForm);
+                            target.appendJavaScript(
+                                    "$('#"+formComponent.getMarkupId() + "').addClass('error');");
+                            final FeedbackMessage message = formComponent.getFeedbackMessages().first(FeedbackMessage.ERROR);
+                            formComponent.add(new AttributeModifier("title", message.getMessage()));
+                        } else {
+                            members.add(new AttributeModifier("title", ""));
+                        }
 
                     }
                 });
             }
 
-        };
-        // eventForm.setDefaultModel(new
-        // CompoundPropertyModel<EventView>(eventView));
-
-        add(eventForm);
-
-        // Event's title:
-        final TextField<String> eventTitle = new TextField<String>("eventTitle");
-        eventTitle.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onUpdate(final AjaxRequestTarget target) {
-            }
         });
-        eventForm.add(eventTitle);
+    }
 
-        // Event's type:
-        final AutoCompleteTextField<String> eventType = new AutoCompleteTextField<String>("eventType") {
-
-            @Override
-            protected Iterator<String> getChoices(final String input) {
-
-                return eventsDAO.findTypes(input).iterator();
-            }
-
-        };
-        eventTitle.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void onUpdate(final AjaxRequestTarget target) {
-            }
-        });
-        eventForm.add(eventType);
-
-        // Events list view's container (for Ajax updates)
-        final WebMarkupContainer eventItemsContainer = new WebMarkupContainer("eventItemsContainer");
+    private WebMarkupContainer getMemberItems(final String id) {
+        final WebMarkupContainer eventItemsContainer = new WebMarkupContainer(id);
         eventItemsContainer.setOutputMarkupId(true);
-        eventForm.add(eventItemsContainer);
 
-        // Events list view
+        // Members list view
 
-        eventItemsControl = new ListView<EventMemberItem>("eventItems") {
+        final ListView<EventMemberItem> eventItemsControl = new ListView<EventMemberItem>("eventItems") {
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void populateItem(final ListItem<EventMemberItem> item) {
-                /**/System.out.print("");
-                item.add(new EventMemberComponent("eventMemberItem", item.getModel(),
+                final EventMemberComponent c = new EventMemberComponent("eventMemberItem", item.getModel(),
                         eventView.getEventItems().size() > 1) {
 
                     private static final long serialVersionUID = 1L;
@@ -131,25 +148,49 @@ public class EditEvent extends Layout {
                         target.add(eventItemsContainer);
                     }
 
-                });
+                };
+                c.setOutputMarkupId(true);
+                item.add(c);
 
             }
 
         };
         eventItemsControl.setReuseItems(true);
+        eventItemsContainer.setOutputMarkupId(true);
         eventItemsContainer.add(eventItemsControl);
+        return eventItemsContainer;
+    }
 
-        // Event submission button
-        eventForm.add(new AjaxSubmitLink("submit") {
+    private AutoCompleteTextField<String> getEventType(final String id) {
+        final AutoCompleteTextField<String> eventType = new AutoCompleteTextField<String>(id) {
+
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void onSubmit(final AjaxRequestTarget target, final Form<?> form) {
-                eventManager.saveEvent(eventView);
-                setResponsePage(MainPage.class);
-            }
+            protected Iterator<String> getChoices(final String input) {
 
-        });
+                return eventsDAO.findTypes(input).iterator();
+            }
+        };
+        eventType.add(StringValidator.minimumLength(MIN_TYPE_LEN));
+        eventType.add(NotNullValidator.instance());
+        eventType.setOutputMarkupId(true);
+        return eventType;
+    }
+
+    private TextField<String> getEventTitle(final String id) {
+        final TextField<String> eventTitle = new TextField<String>(id);
+        /*eventTitle.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void onUpdate(final AjaxRequestTarget target) {
+            }
+        });*/
+        eventTitle.add(StringValidator.minimumLength(MIN_EVENT_LEN));
+        eventTitle.add(NotNullValidator.instance());
+        eventTitle.setOutputMarkupId(true);
+        return eventTitle;
     }
 
 }

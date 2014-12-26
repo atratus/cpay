@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package trsit.cpay.web.edit;
 
@@ -30,39 +30,39 @@ public abstract class EventMemberComponent extends FormComponentPanel<EventMembe
     private static final long serialVersionUID = 1L;
 
     private static class DummyAjaxComponentBehavior extends AjaxFormComponentUpdatingBehavior {
-        public DummyAjaxComponentBehavior(String event) {
+        public DummyAjaxComponentBehavior(final String event) {
             super(event);
         }
         private static final long serialVersionUID = 1L;
-        protected void onUpdate(AjaxRequestTarget target) {
-            
+        @Override
+        protected void onUpdate(final AjaxRequestTarget target) {
+
         }
     };
 
     @SpringBean
     private UserDAO userDAO;
-    private NumberTextField<Integer> paymentInput;
+    private final NumberTextField<Integer> paymentInput;
 
     private static class UserViewBeanRenderer implements IChoiceRenderer<UserViewBean> {
         private static final long serialVersionUID = 1L;
 
         @Override
-        public Object getDisplayValue(UserViewBean object) {
+        public Object getDisplayValue(final UserViewBean object) {
             return object.getName();
         }
 
         @Override
-        public String getIdValue(UserViewBean object, int index) {
+        public String getIdValue(final UserViewBean object, final int index) {
             return String.valueOf(object.getUserId());
         }
     }
 
-    public EventMemberComponent(String id, IModel<EventMemberItem> model, boolean removeControlEnabled) {
+    public EventMemberComponent(final String id, final IModel<EventMemberItem> model, final boolean removeControlEnabled) {
         super(id, model);
 
-
         setDefaultModel(new CompoundPropertyModel<EventMemberItem>(model));
-        
+
         // User selector
         final DropDownChoice<UserViewBean> userSelector =  new DropDownChoice<UserViewBean>(
                 "user", getUserViews(), new UserViewBeanRenderer());
@@ -74,49 +74,44 @@ public abstract class EventMemberComponent extends FormComponentPanel<EventMembe
         paymentInput = new NumberTextField<Integer>("paymentValue");
         paymentInput.add(new DummyAjaxComponentBehavior("onchange"));
         add(paymentInput);
-        
+
         // 'Add' control
         add(new AjaxLink<Void>("add") {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(final AjaxRequestTarget target) {
                 onAddEventItem(target);
-                
             }
-            
         });
-        
+
         // 'Delete' control
-        AjaxLink<Void> deleteLink = new AjaxLink<Void>("delete") {
+        final AjaxLink<Void> deleteLink = new AjaxLink<Void>("delete") {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            public void onClick(final AjaxRequestTarget target) {
                 onDeleteEventItem(target);
-                
             }
-            
         };
         if(!removeControlEnabled) {
             deleteLink.add(new AttributeAppender("style", "display:none;"));
         }
         add(deleteLink);
-        
+
     }
+    protected abstract void onDeleteEventItem(final AjaxRequestTarget target);
 
-
-    protected abstract void onDeleteEventItem(AjaxRequestTarget target);
-
-    protected abstract void onAddEventItem(AjaxRequestTarget target);
-
+    protected abstract void onAddEventItem(final AjaxRequestTarget target);
 
     @Override
     protected void convertInput() {
-
-        setConvertedInput(getModelObject());
+        final EventMemberItem member = getModelObject();
+        setConvertedInput(member);
+        if(member.getUser() == null) {
+            error("User is not specified");
+        }
     }
-
 
     private IModel<List<UserViewBean>> getUserViews() {
         return new LoadableDetachableModel<List<UserViewBean>>() {
@@ -124,8 +119,8 @@ public abstract class EventMemberComponent extends FormComponentPanel<EventMembe
 
             @Override
             protected List<UserViewBean> load() {
-                List<UserViewBean> userViews = new ArrayList<UserViewBean>();
-                for(User user: userDAO.getUsers()) {//TODO: use [declarative] per-thread cache 
+                final List<UserViewBean> userViews = new ArrayList<UserViewBean>();
+                for(final User user: userDAO.getUsers()) {//TODO: use [declarative] per-thread cache
                     userViews.add(UserViewBean.builder()
                             .name(user.getName())
                             .userId(user.getId())
@@ -133,7 +128,6 @@ public abstract class EventMemberComponent extends FormComponentPanel<EventMembe
                 }
                 return userViews;
             }
-            
         };
     }
 }

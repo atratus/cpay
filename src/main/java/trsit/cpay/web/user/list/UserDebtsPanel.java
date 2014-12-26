@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
-import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.markup.html.repeater.data.grid.ICellPopulator;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.AbstractColumn;
 import org.apache.wicket.extensions.markup.html.repeater.data.table.DefaultDataTable;
@@ -73,13 +72,6 @@ public class UserDebtsPanel extends Panel {
         add(eventFilter);
 
 
-    }
-
-    @Override
-    public void onEvent(final IEvent<?> event) {
-        if(event.getPayload() instanceof AjaxRequestTarget) {
-            ((AjaxRequestTarget)event.getPayload()).appendJavaScript("init();");
-        }
     }
 
     private Component createUsersTable(final String tableComponentName) {
