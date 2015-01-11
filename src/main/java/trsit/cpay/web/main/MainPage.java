@@ -12,6 +12,7 @@ import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import trsit.cpay.web.edit.EditEvent;
@@ -40,14 +41,14 @@ public class MainPage extends Layout {
 
     }
 
-    private Component createTabbedPanel(String tabbedPanelId) {
-        List<ITab> tabs = new ArrayList<ITab>();
+    private Component createTabbedPanel(final String tabbedPanelId) {
+        final List<ITab> tabs = new ArrayList<ITab>();
         tabs.add(new AbstractTab(new Model<String>("Events"))
         {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public Panel getPanel(String panelId) {
+            public Panel getPanel(final String panelId) {
                 return new EventsListPanel(panelId);
             }
         });
@@ -56,12 +57,17 @@ public class MainPage extends Layout {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public Panel getPanel(String panelId) {
+            public Panel getPanel(final String panelId) {
                 return new UserDebtsPanel(panelId);
             }
         });
 
         return new AjaxTabbedPanel<ITab>(tabbedPanelId, tabs);
+    }
+    @Override
+    protected IModel<String> getPageTitle() {
+
+        return new Model<String>("Community Events");//TODO
     }
 
 }

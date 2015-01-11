@@ -3,11 +3,16 @@
     xmlns:wicket="http://wicket.apache.org">
 
 <wicket:head>
-<wicket:link>
-    <link rel="stylesheet" type="text/css" href="cpay.css" />
-</wicket:link>
+    <wicket:link>
+        <link rel="stylesheet" type="text/css" href="cpay.css" />
+    </wicket:link>
 </wicket:head>
 <body class="main" onload="init()">
+    <div class="header">
+        <div class="logo">
+            <wicket:link><img src="toy-train-1.png"></img></wicket:link></div>
+        <div class="pageTitle"><span wicket:id="pageTitle"/></div>
+    </div>
     <wicket:child />
 </body>
 </html>
