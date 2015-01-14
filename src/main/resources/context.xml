@@ -12,11 +12,12 @@
 
     <context:component-scan base-package="trsit.cpay" />
     <tx:annotation-driven />
+    <context:property-placeholder location="classpath:trsit/default.properties"/>
 
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
         destroy-method="close">
         <property name="driverClass" value="org.h2.Driver" />
-        <property name="jdbcUrl" value="jdbc:h2:~/cpay/cpay_db" />
+        <property name="jdbcUrl" value="${db.url}" />
         <property name="autoCommitOnClose" value="true" />
         <property name="user" value="sa" />
     </bean>

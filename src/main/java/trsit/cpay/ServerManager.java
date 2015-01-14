@@ -33,12 +33,15 @@ public class ServerManager {
     @PostConstruct
     private void init() throws Exception {
         CPayApplication.SPRING_CTX = appCtx;
-        Server server = new Server(getPort());
-        WebAppContext appCtx = new WebAppContext();
+        final Server server = new Server(getPort());
+        final WebAppContext appCtx = new WebAppContext();
         appCtx.setContextPath("/cpay");
         appCtx.setResourceBase(".");
 
-        FilterHolder wicketFilterHolder = appCtx.addFilter(WicketFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
+        //        appCtx.addEventListener(new ContextLoaderListener());
+        //        appCtx.setInitParameter("contextConfigLocation", "classpath*:**/context.xml");
+
+        final FilterHolder wicketFilterHolder = appCtx.addFilter(WicketFilter.class, "/*", EnumSet.allOf(DispatcherType.class));
         wicketFilterHolder.setInitParameter("applicationClassName", CPayApplication.class.getName());
         wicketFilterHolder.setInitParameter(WicketFilter.FILTER_MAPPING_PARAM, "/*");
         server.setHandler(appCtx);
