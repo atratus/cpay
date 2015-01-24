@@ -126,7 +126,7 @@ div.tabpanel div.tab-row li.selected a {
 div.wicket-aa {
     background-color:white;
     border:1px solid #CCCCCC;
-    color:black;
+    color:black;nput
 }
 div.wicket-aa ul {
    list-style-image:none;
@@ -149,12 +149,15 @@ div.wicket-aa ul li.selected {
     float:left;
 }
 .pageTitle {
-/*    float:right;*/
+    float:left;
     vertical-align: middle;
     padding-top:30px;
     font-weight:bold;
     font-size:20pt;
-    height:100px;
+    height:50px;
+}
+.userName {
+    float:right;
 }
 .header {
     width:100%;
@@ -166,4 +169,22 @@ a:link {
 a:hover {
     text-decoration: underline;
 
+}
+
+.register, .login {
+    width:200px;
+    margin-left:auto;
+    margin-right:auto;
+}
+.label {
+    margin-top:5px;
+    float:left;
+}
+.input {
+    width:100px;
+    float:right;
+}
+
+.loginLine {
+    height:30px;
 }

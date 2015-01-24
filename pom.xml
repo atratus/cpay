@@ -168,6 +168,12 @@
             <version>6.17.0</version>
         </dependency>
         <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-auth-roles</artifactId>
+            <version>6.17.0</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.googlecode.wicket-jquery-ui</groupId>
             <artifactId>wicket-jquery-ui</artifactId>
             <version>6.17.0</version>
@@ -205,6 +211,11 @@
         </dependency>
         <dependency>
             <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-annotations</artifactId>
+            <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
             <artifactId>jetty-webapp</artifactId>
             <version>${jetty.version}</version>
         </dependency>
@@ -215,6 +226,73 @@
             <version>${spring.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>3.2.5.RELEASE</version>
+            <exclusions>
+                <!-- exclusion> <artifactId>org.springframework.security</artifactId> 
+                    <groupId>spring-security-core</groupId> </exclusion -->
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-web</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-expression</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-aop</artifactId>
+                </exclusion>
+
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>3.2.5.RELEASE</version>
+            <exclusions>
+                <!-- exclusion> <groupId>org.springframework.security</groupId> 
+                    <artifactId>spring-security-core</artifactId> </exclusion -->
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-aop</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-beans</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-core</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- dependency> <groupId>org.springframework.security</groupId> 
+            <artifactId>spring-security-core</artifactId> <version>3.2.5.RELEASE</version> 
+            <exclusions> <exclusion> <groupId>org.springframework</groupId> <artifactId>spring-core</artifactId> 
+            </exclusion> <exclusion> <groupId>org.springframework</groupId> <artifactId>spring-beans</artifactId> 
+            </exclusion> <exclusion> <artifactId>spring-aop</artifactId> <groupId>org.springframework</groupId> 
+            </exclusion> </exclusions> </dependency -->
+
+
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
             <version>${spring.version}</version>
@@ -222,6 +300,11 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
             <version>${spring.version}</version>
         </dependency>
         <dependency>

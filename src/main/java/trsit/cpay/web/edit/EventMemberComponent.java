@@ -19,8 +19,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
-import trsit.cpay.persistence.dao.UserDAO;
-import trsit.cpay.persistence.model.User;
+import trsit.cpay.service.persistence.dao.UserDAO;
+import trsit.cpay.service.persistence.model.User;
 
 /**
  * @author black

@@ -28,9 +28,9 @@ import org.apache.wicket.util.visit.IVisit;
 import org.apache.wicket.util.visit.IVisitor;
 import org.apache.wicket.validation.validator.StringValidator;
 
-import trsit.cpay.persistence.dao.EventsDAO;
+import trsit.cpay.service.persistence.dao.EventsDAO;
+import trsit.cpay.service.web.event.EventViewManager;
 import trsit.cpay.web.event.EventView;
-import trsit.cpay.web.event.EventViewManager;
 import trsit.cpay.web.main.MainPage;
 import trsit.cpay.web.page.Layout;
 import trsit.cpay.web.validation.NotNullValidator;

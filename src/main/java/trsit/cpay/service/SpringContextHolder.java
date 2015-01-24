@@ -1,7 +1,7 @@
 /**
  *
  */
-package trsit.cpay;
+package trsit.cpay.service;
 
 import javax.inject.Inject;
 

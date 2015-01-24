@@ -1,13 +1,14 @@
 /**
  *
  */
-package trsit.cpay.persistence.dao;
+package trsit.cpay.service.persistence.dao;
 
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import trsit.cpay.data.ItemsSet;
 import trsit.cpay.persistence.model.QUser;
-import trsit.cpay.persistence.model.User;
+import trsit.cpay.service.persistence.model.User;
 
 import com.mysema.query.jpa.JPQLQuery;
 
@@ -29,10 +30,16 @@ public class UserDAO  extends AbstractDAO {
     }
 
     /**
-     * @see trsit.cpay.persistence.dao.UserDAO#getUsers()
+     * @see trsit.cpay.service.persistence.dao.UserDAO#getUsers()
      */
     public ItemsSet<User> getUsers() {
         return buildSet(QUser.user, new UsersQueryProvider());
+    }
+
+    @Transactional
+    public void save(final User user) {
+        saveOrUpdate(user);
+
     }
 
 }

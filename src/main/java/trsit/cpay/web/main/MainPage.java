@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.Component;
+import org.apache.wicket.authroles.authorization.strategies.role.annotations.AuthorizeInstantiation;
 import org.apache.wicket.extensions.ajax.markup.html.tabs.AjaxTabbedPanel;
 import org.apache.wicket.extensions.markup.html.tabs.AbstractTab;
 import org.apache.wicket.extensions.markup.html.tabs.ITab;
@@ -23,6 +24,7 @@ import trsit.cpay.web.user.list.UserDebtsPanel;
 /**
  * @author black
  */
+@AuthorizeInstantiation("USER")
 public class MainPage extends Layout {
     private static final long serialVersionUID = 1L;
 

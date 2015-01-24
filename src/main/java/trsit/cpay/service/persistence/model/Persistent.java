@@ -1,7 +1,7 @@
 /**
  * 
  */
-package trsit.cpay.persistence.model;
+package trsit.cpay.service.persistence.model;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

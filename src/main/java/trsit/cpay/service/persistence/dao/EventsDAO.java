@@ -1,7 +1,7 @@
 /**
  *
  */
-package trsit.cpay.persistence.dao;
+package trsit.cpay.service.persistence.dao;
 
 import static trsit.cpay.persistence.model.QPaymentEvent.paymentEvent;
 
@@ -14,8 +14,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import trsit.cpay.data.ItemsSet;
-import trsit.cpay.persistence.model.PaymentEvent;
 import trsit.cpay.persistence.model.QPaymentEvent;
+import trsit.cpay.service.persistence.model.PaymentEvent;
 
 import com.mysema.query.jpa.JPQLQuery;
 

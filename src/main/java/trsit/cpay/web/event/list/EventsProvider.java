@@ -9,7 +9,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import trsit.cpay.data.ItemsSet;
-import trsit.cpay.persistence.model.PaymentEvent;
+import trsit.cpay.service.persistence.model.PaymentEvent;
 
 public class EventsProvider extends SortableDataProvider<EventListView, String> {
     private static final long serialVersionUID = 1L;

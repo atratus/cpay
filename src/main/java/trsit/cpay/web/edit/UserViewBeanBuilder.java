@@ -3,7 +3,7 @@
  */
 package trsit.cpay.web.edit;
 
-import trsit.cpay.persistence.model.User;
+import trsit.cpay.service.persistence.model.User;
 
 /**
  * @author black

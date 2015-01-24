@@ -1,7 +1,7 @@
 /**
  *
  */
-package trsit.cpay.persistence.dao;
+package trsit.cpay.service.persistence.dao;
 
 import com.mysema.query.jpa.JPQLQuery;
 

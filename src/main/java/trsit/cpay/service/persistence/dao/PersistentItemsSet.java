@@ -1,7 +1,7 @@
 /**
  *
  */
-package trsit.cpay.persistence.dao;
+package trsit.cpay.service.persistence.dao;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -12,8 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import trsit.cpay.SpringContextHolder;
 import trsit.cpay.data.ItemsSet;
+import trsit.cpay.service.SpringContextHolder;
 
 import com.mysema.query.jpa.JPQLQuery;
 import com.mysema.query.types.Expression;

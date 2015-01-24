@@ -1,7 +1,7 @@
 /**
  *
  */
-package trsit.cpay.web.event;
+package trsit.cpay.service.web.event;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -13,12 +13,13 @@ import javax.inject.Inject;
 import org.apache.commons.collections4.ListUtils;
 import org.springframework.stereotype.Service;
 
-import trsit.cpay.persistence.dao.EventsDAO;
-import trsit.cpay.persistence.model.Payment;
-import trsit.cpay.persistence.model.PaymentEvent;
-import trsit.cpay.persistence.model.User;
+import trsit.cpay.service.persistence.dao.EventsDAO;
+import trsit.cpay.service.persistence.model.Payment;
+import trsit.cpay.service.persistence.model.PaymentEvent;
+import trsit.cpay.service.persistence.model.User;
 import trsit.cpay.web.edit.EventMemberItem;
 import trsit.cpay.web.edit.UserViewBeanBuilder;
+import trsit.cpay.web.event.EventView;
 
 /**
  * @author black

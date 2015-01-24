@@ -24,9 +24,9 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 
 import trsit.cpay.data.ItemsSet;
-import trsit.cpay.persistence.dao.EventsDAO;
-import trsit.cpay.persistence.dao.PaymentDAO;
-import trsit.cpay.persistence.dao.UserPayment;
+import trsit.cpay.service.persistence.dao.EventsDAO;
+import trsit.cpay.service.persistence.dao.PaymentDAO;
+import trsit.cpay.service.persistence.dao.UserPayment;
 
 /**
  * @author black

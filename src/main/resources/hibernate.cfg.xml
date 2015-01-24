@@ -4,10 +4,11 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <mapping package="trsit.cpay.persistence.model"/>
+    <mapping package="trsit.cpay.service.persistence.model"/>
     
-    <mapping class="trsit.cpay.persistence.model.User"/>
-    <mapping class="trsit.cpay.persistence.model.Payment"/>
-    <mapping class="trsit.cpay.persistence.model.PaymentEvent"/>
+    <mapping class="trsit.cpay.service.persistence.model.User"/>
+    <mapping class="trsit.cpay.service.persistence.model.UserAuthority"/>
+    <mapping class="trsit.cpay.service.persistence.model.Payment"/>
+    <mapping class="trsit.cpay.service.persistence.model.PaymentEvent"/>
   </session-factory>
 </hibernate-configuration>

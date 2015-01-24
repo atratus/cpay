@@ -12,7 +12,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import trsit.cpay.data.ItemsSet;
-import trsit.cpay.persistence.dao.UserPayment;
+import trsit.cpay.service.persistence.dao.UserPayment;
 
 /**
  * @author black

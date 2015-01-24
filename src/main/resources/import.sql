@@ -1,6 +1,8 @@
-insert into User (id, name) values (10,'Vasya');
-insert into User (id, name) values (11,'Vova');
-insert into User (id, name) values (12,'Kolya');
+insert into UserAuthority (authority) values ('USER');
+
+insert into User (id, name, password, enabled, authority) values (10,'Vasya', '123', true, 'USER');
+insert into User (id, name, password, enabled, authority) values (11,'Vova', '123', true, 'USER');
+insert into User (id, name, password, enabled, authority) values (12,'Kolya', '321', true, 'USER');
 
 insert into PaymentEvent (id, eventType, title, creationtimestamp, totalValue) values (10, 'type A', 'Event First', CURRENT_TIMESTAMP, 0);
 insert into PaymentEvent (id, eventType, title, creationtimestamp, totalValue) values (11, 'type A', 'Event Second', CURRENT_TIMESTAMP, 0);

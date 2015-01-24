@@ -1,12 +1,12 @@
 /**
  *
  */
-package trsit.cpay.persistence.dao;
+package trsit.cpay.service.persistence.dao;
 
 import java.math.BigDecimal;
 
 import lombok.Data;
-import trsit.cpay.persistence.model.User;
+import trsit.cpay.service.persistence.model.User;
 
 /**
  * @author black
